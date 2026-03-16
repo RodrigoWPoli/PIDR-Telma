@@ -48,7 +48,7 @@ def get_latest_values() -> dict:
     db         = client[DATABASE_NAME]
     collection = db[COLLECTION_NAME]
 
-    variables = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou"]
+    variables = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production"]
     latest    = {}
     for var in variables:
         doc = collection.find_one(

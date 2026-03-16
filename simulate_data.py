@@ -48,6 +48,9 @@ def insert_reading(values: dict, timestamp: datetime = None) -> None:
     """Insert a simulated sensor reading into MongoDB."""
     if timestamp is None:
         timestamp = datetime.now(timezone.utc)
+    # Always include En_Production — default True (machine running)
+    if "En_Production" not in values:
+        values["En_Production"] = True
     doc = {}
     for name, value in values.items():
         doc[name] = {
@@ -79,11 +82,11 @@ def simulate_scenario(
         values = {
             "Otr_acc":        int(otr_value),
             "Rfrd_acc":       rfrd_value,
-            "Ent_bob_cour":   True,   # coil in normal operating position
+            "Ent_bob_cour":   True,
             "Ent_bob_abou":   False,
+            "En_Production":  True,
             "TempMoteur_acc": round(random.uniform(35.0, 45.0), 1),
             "Lcr_acc":        round(random.uniform(1.5, 2.5), 2),
-            "FinProd":        False,
         }
         insert_reading(values, current_time)
         current_time += timedelta(seconds=interval_seconds)
@@ -116,9 +119,9 @@ def simulate_coil_change(start_time: datetime, interval_seconds: float = 1.0) ->
     ]
 
     for step in steps:
+        step["En_Production"]  = True
         step["TempMoteur_acc"] = 38.0
         step["Lcr_acc"]        = 0.0
-        step["FinProd"]        = False
         insert_reading(step, current_time)
         current_time += timedelta(seconds=interval_seconds)
 
@@ -183,18 +186,33 @@ def run_full_simulation(clear_first: bool = False) -> None:
     )
 
     # ── Phase 4: Zero reading while NOT changing coil → Faulty ────────────────
-    print("\n  [Faulty] Simulating stopped motor (Otr_acc=0, coil not changing)...")
+    print("\n  [Faulty] Simulating stopped motor during production (Otr_acc=0, coil not changing)...")
     for i in range(5):
         insert_reading({
             "Otr_acc":        0,
             "Rfrd_acc":       0,
             "Ent_bob_cour":   True,
             "Ent_bob_abou":   False,
+            "En_Production":  True,   # still in production → Faulty
             "TempMoteur_acc": 55.0,
             "Lcr_acc":        0.0,
-            "FinProd":        False,
         }, t + timedelta(seconds=i))
+    t += timedelta(seconds=5)
     print("    ✓ 5 faulty readings inserted")
+
+    # ── Phase 5: Machine stopped normally → Stopped (not a fault) ─────────────
+    print("\n  [Stopped] Simulating normal machine stop (En_Production=False)...")
+    for i in range(5):
+        insert_reading({
+            "Otr_acc":        0,
+            "Rfrd_acc":       0,
+            "Ent_bob_cour":   True,
+            "Ent_bob_abou":   False,
+            "En_Production":  False,  # machine off → Stopped (normal)
+            "TempMoteur_acc": 35.0,
+            "Lcr_acc":        0.0,
+        }, t + timedelta(seconds=i))
+    print("    ✓ 5 stopped readings inserted")
 
     # ── Summary ────────────────────────────────────────────────────────────────
     total = collection.count_documents({})
@@ -204,9 +222,11 @@ def run_full_simulation(clear_first: bool = False) -> None:
     print(f"  Healthy  — Otr_acc in (0, {ALERT_THRESHOLD}]")
     print(f"  Alert    — Otr_acc in ({ALERT_THRESHOLD}, {ALARM_THRESHOLD}]")
     print(f"  Alarm    — Otr_acc > {ALARM_THRESHOLD}")
-    print(f"  Faulty   — Otr_acc = 0 AND coil NOT changing")
+    print(f"  Faulty   — Otr_acc = 0 AND coil NOT changing AND En_Production = True")
     print(f"  Healthy  — Otr_acc = 0 AND coil IS changing (coil change event)")
-    print(f"\nNext step: run update_ontology.py to populate the ontology")
+    print(f"  Stopped  — Otr_acc = 0 AND En_Production = False (normal stop)")
+    print(f"\nNext step: run realtime_monitor.py --polling in one terminal,")
+    print(f"           then simulate_data.py --clear in another")
     print(f"{'='*55}")
 
 

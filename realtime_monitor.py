@@ -29,7 +29,7 @@ DATABASE_NAME   = "telma"
 COLLECTION_NAME = "data"
 
 # Variables extracted from each MongoDB document
-WATCHED_VARIABLES = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou"]
+WATCHED_VARIABLES = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production"]
 
 # Visual indicators for each state
 STATE_DISPLAY = {
