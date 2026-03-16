@@ -33,11 +33,12 @@ WATCHED_VARIABLES = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou"]
 
 # Visual indicators for each state
 STATE_DISPLAY = {
-    "Healthy": "🟢 HEALTHY",
-    "Alert":   "🟡 ALERT  ",
-    "Alarm":   "🔴 ALARM  ",
-    "Faulty":  "⚫ FAULTY ",
-    None:      "⬜ UNKNOWN",
+    "Healthy": "🟢 HEALTHY ",
+    "Alert":   "🟡 ALERT   ",
+    "Alarm":   "🔴 ALARM   ",
+    "Faulty":  "⚫ FAULTY  ",
+    "Stopped": "⬜ STOPPED ",
+    None:      "❓ UNKNOWN ",
 }
 
 
