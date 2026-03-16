@@ -1,5 +1,3 @@
-# TELMA Project - Python dependencies
-# Install with: pip install -r requirements.txt
 
 owlready2>=0.46
 pymongo>=4.6
