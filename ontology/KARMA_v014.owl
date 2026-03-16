@@ -1,0 +1,3019 @@
+<?xml version="1.0"?>
+<Ontology xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.semanticweb.org/adalpole/ontologies/2022/9/KARMA"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     ontologyIRI="http://www.semanticweb.org/adalpole/ontologies/2022/9/KARMA">
+    <Prefix name="" IRI="http://www.semanticweb.org/adalpole/ontologies/2022/9/KARMA"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Annotation>
+        <AnnotationProperty abbreviatedIRI="owl:versionInfo"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">0.1</Literal>
+    </Annotation>
+    <Declaration>
+        <Class IRI="#Component"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ComponentID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ComponentRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ConditionMonitoring"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Continuant"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#CyclicPreventiveMaintenanceElapsedInterval"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DegradationProcess"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DegradationThresholdOvershoot"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DescriptiveInformationContentEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DesignativeInformationContentEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Deviation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#DirectiveInformationContentEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Disposition"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#EconomicIndicator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ElectromechanicalFailureMode"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#EnvironmentalIndicator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#FailureCauseID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#FailureMode"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#FailureModeID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Flow"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Function"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#GenericallyDependentContinuant"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HealthAssessment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HigherEnergyConsumption"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#HydraulicFailureMode"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Identifier"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#IndependentContinuant"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Indicator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#IndicatorID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#InformationContentEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#InspectionAction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#InspectionTriggeringEvent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Machine"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MachineID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MachineRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MachineUnit"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MachineUnitID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MachineUnitRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaintenanceAction"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaintenanceManagement"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaintenanceProcess"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaintenanceTriggeringEvent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaterialArtifact"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MaterialEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#MechanicalFailureMode"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Negative"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Nonconformity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Object"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ObjectAggregate"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Occurrent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PneumaticFailureMode"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Positive"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PrimaryFailureCause"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Process"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ProcessBoundary"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ProcessState"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Product"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ProductRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ProductionProcess"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#PrognosticAssessment"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#QualitativeDeviation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Quality"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#QuantitativeDeviation"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#RealizableEntity"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Requirement"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Role"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SecondaryFailureCause"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Sensor"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SensorID"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SensorRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SocialIndicator"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#SpecificallyDependentContinuant"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#State"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#StateOfFailure"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#System"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Tool"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#ToolRole"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TransportationProcess"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#TriggeringEvent"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#Variable"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#Implies"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#bearerOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#exceeds"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#has"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasDeviation"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasFailureState"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasFlow"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasFunction"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasID"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasPart"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasRole"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#hasState"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isAbout"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isCarrierOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isCauseOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isCausedBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isConsideredBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isInstalledOn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isMeasureOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isMeasuredBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isOutputOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isPartOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isRealisedIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isRoleOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#isTriggeredBy"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#leadsTo"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#manifests"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#measure"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#memberOf"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#occursIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#partecipatesIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#resultsIn"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#violates"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasAlarmThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasAlertThreshold"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasCurrentValue"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasHorizontalPosition"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasIDvalue"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasLabel"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#hasVerticalPosition"/>
+    </Declaration>
+    <Declaration>
+        <DataProperty IRI="#isChanging"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorBand"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorBandID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorBelt"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorBeltID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorDrum"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorDrumID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorMotorID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorMotorProvidesAdequateMechanicalRotationForBandAccumulation"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulley1"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulley1ID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulley2"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulley2ID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystemID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Alarm"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Alert"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BandFlow"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BearingDeteriorationID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BearingNotWorking"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigue"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigueID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Coil"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#CoilChangingProcessState"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Ent_bob_abou"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Ent_bob_cour"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Faulty"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#FaultyAlarmProcessState"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#FaultyAlertProcessState"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Healthy"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#HealthyProcessState"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessAccumulatorBandLevel"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessAccumulatorBandMaterialFlowRate"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessAccumulatorDrumRotationalSpeed"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessAccumulatorPulleyBeltSystemRotationalSpeed"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#LessGearAccumulatorMotorOutputShaftRotationalSpeed"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#MoreAccumulatorMotorTorque"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#NumberOfPieces"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Otr_acc"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#ProcessRequirement"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Rfrd_acc"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SQ14"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SQ15"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#SQ22"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#ShapeOfPieces"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#StandByProcessState"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#Telma"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#TelmaID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#TorqueFlow"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioningID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediatelyID"/>
+    </Declaration>
+    <Declaration>
+        <NamedIndividual IRI="#UnwindingSubSystemID"/>
+    </Declaration>
+    <Declaration>
+        <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+    </Declaration>
+    <EquivalentClasses>
+        <Class IRI="#Nonconformity"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#Deviation"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#exceeds"/>
+                <Class IRI="#Requirement"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <EquivalentClasses>
+        <Class IRI="#SecondaryFailureCause"/>
+        <ObjectIntersectionOf>
+            <Class IRI="#FailureMode"/>
+            <ObjectSomeValuesFrom>
+                <ObjectProperty IRI="#isCauseOf"/>
+                <Class IRI="#FailureMode"/>
+            </ObjectSomeValuesFrom>
+        </ObjectIntersectionOf>
+    </EquivalentClasses>
+    <SubClassOf>
+        <Class IRI="#Component"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Component"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasPart"/>
+            <Class IRI="#Component"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Component"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isPartOf"/>
+            <Class IRI="#MachineUnit"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Component"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#ConditionMonitoring"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ComponentID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ComponentRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ComponentRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#Component"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ConditionMonitoring"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#CyclicPreventiveMaintenanceElapsedInterval"/>
+        <Class IRI="#MaintenanceTriggeringEvent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DegradationProcess"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DegradationProcess"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#occursIn"/>
+            <Class IRI="#MaterialArtifact"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DegradationThresholdOvershoot"/>
+        <Class IRI="#MaintenanceTriggeringEvent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DescriptiveInformationContentEntity"/>
+        <Class IRI="#InformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DesignativeInformationContentEntity"/>
+        <Class IRI="#InformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Deviation"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Deviation"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCausedBy"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Deviation"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isMeasuredBy"/>
+            <Class IRI="#Sensor"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Deviation"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#leadsTo"/>
+            <Class IRI="#StateOfFailure"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#DirectiveInformationContentEntity"/>
+        <Class IRI="#InformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Disposition"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#EconomicIndicator"/>
+        <Class IRI="#Indicator"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ElectromechanicalFailureMode"/>
+        <Class IRI="#FailureMode"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#EnvironmentalIndicator"/>
+        <Class IRI="#Indicator"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureCauseID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureCauseID"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#isAbout"/>
+            <Class IRI="#PrimaryFailureCause"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureMode"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureMode"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCauseOf"/>
+            <Class IRI="#Deviation"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureMode"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCauseOf"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureMode"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRealisedIn"/>
+            <Class IRI="#DegradationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureModeID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#FailureModeID"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#isAbout"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Flow"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Function"/>
+        <Class IRI="#Disposition"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Function"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRealisedIn"/>
+            <Class IRI="#ProductionProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Function"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRealisedIn"/>
+            <Class IRI="#TransportationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#GenericallyDependentContinuant"/>
+        <Class IRI="#Continuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HealthAssessment"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HigherEnergyConsumption"/>
+        <Class IRI="#QuantitativeDeviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#HydraulicFailureMode"/>
+        <Class IRI="#FailureMode"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Identifier"/>
+        <Class IRI="#DesignativeInformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#IndependentContinuant"/>
+        <Class IRI="#Continuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Indicator"/>
+        <Class IRI="#DescriptiveInformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#IndicatorID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#InformationContentEntity"/>
+        <Class IRI="#GenericallyDependentContinuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#InspectionAction"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#InspectionTriggeringEvent"/>
+        <Class IRI="#TriggeringEvent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasPart"/>
+            <Class IRI="#MachineUnit"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#manifests"/>
+            <Class IRI="#Deviation"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#manifests"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#DegradationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Machine"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#ProductionProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#Machine"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnit"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnit"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasPart"/>
+            <Class IRI="#Component"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnit"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#isPartOf"/>
+            <Class IRI="#Machine"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnitID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnitRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MachineUnitRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#MachineUnit"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceAction"/>
+        <Class IRI="#MaintenanceProcess"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceAction"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#CyclicPreventiveMaintenanceElapsedInterval"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceAction"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#DegradationThresholdOvershoot"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceAction"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isTriggeredBy"/>
+            <Class IRI="#Nonconformity"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceManagement"/>
+        <Class IRI="#MaintenanceProcess"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceProcess"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaintenanceTriggeringEvent"/>
+        <Class IRI="#TriggeringEvent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <Class IRI="#Object"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#bearerOf"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasFunction"/>
+            <Class IRI="#Function"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#hasRole"/>
+            <Class IRI="#Role"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#memberOf"/>
+            <Class IRI="#System"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#TransportationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#hasID"/>
+            <Class IRI="#Identifier"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialArtifact"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#hasState"/>
+            <Class IRI="#State"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MaterialEntity"/>
+        <Class IRI="#IndependentContinuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#MechanicalFailureMode"/>
+        <Class IRI="#FailureMode"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Negative"/>
+        <Class IRI="#Deviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Nonconformity"/>
+        <Class IRI="#Deviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Nonconformity"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#Implies"/>
+            <Class IRI="#TriggeringEvent"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Nonconformity"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#violates"/>
+            <Class IRI="#Requirement"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Object"/>
+        <Class IRI="#MaterialEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ObjectAggregate"/>
+        <Class IRI="#MaterialEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PneumaticFailureMode"/>
+        <Class IRI="#FailureMode"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Positive"/>
+        <Class IRI="#Deviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PrimaryFailureCause"/>
+        <Class IRI="#Occurrent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PrimaryFailureCause"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCauseOf"/>
+            <Class IRI="#FailureMode"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Process"/>
+        <Class IRI="#Occurrent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProcessBoundary"/>
+        <Class IRI="#Occurrent"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProcessState"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Product"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Product"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCarrierOf"/>
+            <Class IRI="#Requirement"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Product"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isOutputOf"/>
+            <Class IRI="#ProductionProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProductRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProductRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#Product"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProductionProcess"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProductionProcess"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCarrierOf"/>
+            <Class IRI="#Requirement"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ProductionProcess"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCauseOf"/>
+            <Class IRI="#DegradationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#PrognosticAssessment"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#QualitativeDeviation"/>
+        <Class IRI="#Deviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Quality"/>
+        <Class IRI="#SpecificallyDependentContinuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#QuantitativeDeviation"/>
+        <Class IRI="#Deviation"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#RealizableEntity"/>
+        <Class IRI="#SpecificallyDependentContinuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Requirement"/>
+        <Class IRI="#DirectiveInformationContentEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Requirement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isAbout"/>
+            <Class IRI="#Product"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Requirement"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isAbout"/>
+            <Class IRI="#ProductionProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Role"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SecondaryFailureCause"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Sensor"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Sensor"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#measure"/>
+            <Class IRI="#Variable"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Sensor"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#ConditionMonitoring"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Sensor"/>
+        <ObjectExactCardinality cardinality="1">
+            <ObjectProperty IRI="#isInstalledOn"/>
+            <Class IRI="#Component"/>
+        </ObjectExactCardinality>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SensorID"/>
+        <Class IRI="#Identifier"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SensorRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SensorRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#Sensor"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SocialIndicator"/>
+        <Class IRI="#Indicator"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#SpecificallyDependentContinuant"/>
+        <Class IRI="#Continuant"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#State"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#StateOfFailure"/>
+        <Class IRI="#State"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#System"/>
+        <Class IRI="#ObjectAggregate"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tool"/>
+        <Class IRI="#MaterialArtifact"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tool"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#MaintenanceProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Tool"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#partecipatesIn"/>
+            <Class IRI="#ProductionProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ToolRole"/>
+        <Class IRI="#Role"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#ToolRole"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isRoleOf"/>
+            <Class IRI="#Tool"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TransportationProcess"/>
+        <Class IRI="#Process"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TransportationProcess"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCarrierOf"/>
+            <Class IRI="#Requirement"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TransportationProcess"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isCauseOf"/>
+            <Class IRI="#DegradationProcess"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#TriggeringEvent"/>
+        <Class IRI="#ProcessBoundary"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Variable"/>
+        <Class IRI="#RealizableEntity"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Variable"/>
+        <ObjectSomeValuesFrom>
+            <ObjectProperty IRI="#isMeasuredBy"/>
+            <Class IRI="#Sensor"/>
+        </ObjectSomeValuesFrom>
+    </SubClassOf>
+    <DisjointClasses>
+        <Class IRI="#Deviation"/>
+        <Class IRI="#FailureMode"/>
+    </DisjointClasses>
+    <ClassAssertion>
+        <Class IRI="#Product"/>
+        <NamedIndividual IRI="#AccumulatorBand"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorBelt"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorBeltID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorDrum"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorDrumID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorMotorID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Function"/>
+        <NamedIndividual IRI="#AccumulatorMotorProvidesAdequateMechanicalRotationForBandAccumulation"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorPulley1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorPulley1ID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorPulley2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorPulley2ID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Component"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ComponentID"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystemID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#State"/>
+        <NamedIndividual IRI="#Alarm"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#State"/>
+        <NamedIndividual IRI="#Alert"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Flow"/>
+        <NamedIndividual IRI="#BandFlow"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MechanicalFailureMode"/>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#FailureModeID"/>
+        <NamedIndividual IRI="#BearingDeteriorationID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#StateOfFailure"/>
+        <NamedIndividual IRI="#BearingNotWorking"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#PrimaryFailureCause"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#FailureCauseID"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigueID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Product"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ProcessState"/>
+        <NamedIndividual IRI="#CoilChangingProcessState"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Variable"/>
+        <NamedIndividual IRI="#Ent_bob_abou"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Variable"/>
+        <NamedIndividual IRI="#Ent_bob_cour"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#State"/>
+        <NamedIndividual IRI="#Faulty"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ProcessState"/>
+        <NamedIndividual IRI="#FaultyAlarmProcessState"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ProcessState"/>
+        <NamedIndividual IRI="#FaultyAlertProcessState"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#State"/>
+        <NamedIndividual IRI="#Healthy"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ProcessState"/>
+        <NamedIndividual IRI="#HealthyProcessState"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessAccumulatorBandLevel"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessAccumulatorBandMaterialFlowRate"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessAccumulatorDrumRotationalSpeed"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessAccumulatorPulleyBeltSystemRotationalSpeed"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Negative"/>
+        <NamedIndividual IRI="#LessGearAccumulatorMotorOutputShaftRotationalSpeed"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Positive"/>
+        <NamedIndividual IRI="#MoreAccumulatorMotorTorque"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Requirement"/>
+        <NamedIndividual IRI="#NumberOfPieces"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Variable"/>
+        <NamedIndividual IRI="#Otr_acc"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Requirement"/>
+        <NamedIndividual IRI="#ProcessRequirement"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Variable"/>
+        <NamedIndividual IRI="#Rfrd_acc"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Flow"/>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Requirement"/>
+        <NamedIndividual IRI="#ShapeOfPieces"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#ProcessState"/>
+        <NamedIndividual IRI="#StandByProcessState"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Machine"/>
+        <NamedIndividual IRI="#Telma"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MachineID"/>
+        <NamedIndividual IRI="#TelmaID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#Flow"/>
+        <NamedIndividual IRI="#TorqueFlow"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MachineUnit"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MechanicalFailureMode"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#FailureModeID"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioningID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MechanicalFailureMode"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#FailureModeID"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediatelyID"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="#MachineUnitID"/>
+        <NamedIndividual IRI="#UnwindingSubSystemID"/>
+    </ClassAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasFlow"/>
+        <NamedIndividual IRI="#AccumulatorBand"/>
+        <NamedIndividual IRI="#BandFlow"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorBand"/>
+        <NamedIndividual IRI="#AccumulatorBandID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorBand"/>
+        <NamedIndividual IRI="#Telma"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorBelt"/>
+        <NamedIndividual IRI="#AccumulatorBeltID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorBelt"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasFlow"/>
+        <NamedIndividual IRI="#AccumulatorDrum"/>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorDrum"/>
+        <NamedIndividual IRI="#AccumulatorDrumID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorDrum"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasFlow"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasFlow"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+        <NamedIndividual IRI="#TorqueFlow"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+        <NamedIndividual IRI="#AccumulatorMotorID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorPulley1"/>
+        <NamedIndividual IRI="#AccumulatorPulley1ID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorPulley1"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorPulley2"/>
+        <NamedIndividual IRI="#AccumulatorPulley2ID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorPulley2"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasFlow"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystemID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#AccumulatorPulleyBeltSystem"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+        <NamedIndividual IRI="#BearingDeteriorationID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isCauseOf"/>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isCauseOf"/>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigue"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigueID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isCauseOf"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigue"/>
+        <NamedIndividual IRI="#BearingDeterioration"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#occursIn"/>
+        <NamedIndividual IRI="#BearingWearByFrictionAndFatigue"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#Coil"/>
+        <NamedIndividual IRI="#Telma"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isMeasureOf"/>
+        <NamedIndividual IRI="#Ent_bob_abou"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isMeasureOf"/>
+        <NamedIndividual IRI="#Ent_bob_cour"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#LessAccumulatorBandMaterialFlowRate"/>
+        <NamedIndividual IRI="#LessAccumulatorBandLevel"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#LessAccumulatorDrumRotationalSpeed"/>
+        <NamedIndividual IRI="#LessAccumulatorBandMaterialFlowRate"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediatelyID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+        <NamedIndividual IRI="#LessGearAccumulatorMotorOutputShaftRotationalSpeed"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#LessAccumulatorPulleyBeltSystemRotationalSpeed"/>
+        <NamedIndividual IRI="#LessAccumulatorDrumRotationalSpeed"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#LessGearAccumulatorMotorOutputShaftRotationalSpeed"/>
+        <NamedIndividual IRI="#LessAccumulatorPulleyBeltSystemRotationalSpeed"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isMeasureOf"/>
+        <NamedIndividual IRI="#Otr_acc"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isMeasureOf"/>
+        <NamedIndividual IRI="#Rfrd_acc"/>
+        <NamedIndividual IRI="#AccumulatorMotor"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isInstalledOn"/>
+        <NamedIndividual IRI="#SQ14"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#measure"/>
+        <NamedIndividual IRI="#SQ14"/>
+        <NamedIndividual IRI="#Ent_bob_abou"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isInstalledOn"/>
+        <NamedIndividual IRI="#SQ15"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#measure"/>
+        <NamedIndividual IRI="#SQ15"/>
+        <NamedIndividual IRI="#Ent_bob_cour"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isInstalledOn"/>
+        <NamedIndividual IRI="#SQ22"/>
+        <NamedIndividual IRI="#Coil"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#Telma"/>
+        <NamedIndividual IRI="#Telma"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+        <NamedIndividual IRI="#UnwindingSubSystemID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#isPartOf"/>
+        <NamedIndividual IRI="#UnwindingSubSystem"/>
+        <NamedIndividual IRI="#Telma"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioningID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDegradatedFunctioning"/>
+        <NamedIndividual IRI="#MoreAccumulatorMotorTorque"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#hasID"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediatelyID"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+        <NamedIndividual IRI="#LessAccumulatorMotorShaftRotationalSpeed"/>
+    </ObjectPropertyAssertion>
+    <ObjectPropertyAssertion>
+        <ObjectProperty IRI="#resultsIn"/>
+        <NamedIndividual IRI="#UnwindingSubSystemDoesNotStartImmediately"/>
+        <NamedIndividual IRI="#MoreAccumulatorMotorTorque"/>
+    </ObjectPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasIDvalue"/>
+        <NamedIndividual IRI="#AccumulatorMotorID"/>
+        <Literal>M1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#Alarm"/>
+        <Literal>AlarmS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#Alert"/>
+        <Literal>AlertS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#Coil"/>
+        <Literal>Bob1</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#CoilChangingProcessState"/>
+        <Literal>CoilCPS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasVerticalPosition"/>
+        <NamedIndividual IRI="#Ent_bob_abou"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasHorizontalPosition"/>
+        <NamedIndividual IRI="#Ent_bob_cour"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#Faulty"/>
+        <Literal>FaultyS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#FaultyAlarmProcessState"/>
+        <Literal>FAlarmPS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#FaultyAlertProcessState"/>
+        <Literal>FAlertPS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#Healthy"/>
+        <Literal>HealthyS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#HealthyProcessState"/>
+        <Literal>HealthyPS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasAlarmThreshold"/>
+        <NamedIndividual IRI="#Otr_acc"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">23.85</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasAlertThreshold"/>
+        <NamedIndividual IRI="#Otr_acc"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">21.73</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasCurrentValue"/>
+        <NamedIndividual IRI="#Otr_acc"/>
+        <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#decimal">18</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#RotationalSpeedFlow"/>
+        <Literal>Frs</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#StandByProcessState"/>
+        <Literal>SBPS</Literal>
+    </DataPropertyAssertion>
+    <DataPropertyAssertion>
+        <DataProperty IRI="#hasLabel"/>
+        <NamedIndividual IRI="#TorqueFlow"/>
+        <Literal>Ft</Literal>
+    </DataPropertyAssertion>
+    <SubObjectPropertyOf>
+        <ObjectProperty IRI="#isCauseOf"/>
+        <ObjectProperty abbreviatedIRI="owl:topObjectProperty"/>
+    </SubObjectPropertyOf>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Deviations Alarm State</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S11</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>AlarmS</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isMeasureOf"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#C1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#PrimaryFailureCause"/>
+                <Variable IRI="#FC1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#occursIn"/>
+                <Variable IRI="#FC1"/>
+                <Variable IRI="#C1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#MechanicalFailureMode"/>
+                <Variable IRI="#FM1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isCauseOf"/>
+                <Variable IRI="#FC1"/>
+                <Variable IRI="#FM1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#MechanicalFailureMode"/>
+                <Variable IRI="#FM2"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isCauseOf"/>
+                <Variable IRI="#FM1"/>
+                <Variable IRI="#FM2"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Negative"/>
+                <Variable IRI="#D1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#resultsIn"/>
+                <Variable IRI="#FM2"/>
+                <Variable IRI="#D1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Positive"/>
+                <Variable IRI="#D2"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#resultsIn"/>
+                <Variable IRI="#FM2"/>
+                <Variable IRI="#D2"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Flow"/>
+                <Variable IRI="#F1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#F1"/>
+                <Literal>Frs</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFlow"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#F1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Flow"/>
+                <Variable IRI="#F2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#F2"/>
+                <Literal>Ft</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFlow"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#F2"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasDeviation"/>
+                <Variable IRI="#F1"/>
+                <Variable IRI="#D1"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasDeviation"/>
+                <Variable IRI="#F2"/>
+                <Variable IRI="#D2"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Deviations Alert state</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S1</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>AlertS</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isMeasureOf"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#C1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#PrimaryFailureCause"/>
+                <Variable IRI="#FC1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#occursIn"/>
+                <Variable IRI="#FC1"/>
+                <Variable IRI="#C1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#MechanicalFailureMode"/>
+                <Variable IRI="#FM1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isCauseOf"/>
+                <Variable IRI="#FC1"/>
+                <Variable IRI="#FM1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#MechanicalFailureMode"/>
+                <Variable IRI="#FM2"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#isCauseOf"/>
+                <Variable IRI="#FM1"/>
+                <Variable IRI="#FM2"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Negative"/>
+                <Variable IRI="#D1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#resultsIn"/>
+                <Variable IRI="#FM2"/>
+                <Variable IRI="#D1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Positive"/>
+                <Variable IRI="#D2"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#resultsIn"/>
+                <Variable IRI="#FM2"/>
+                <Variable IRI="#D2"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Flow"/>
+                <Variable IRI="#F1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#F1"/>
+                <Literal>Frs</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFlow"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#F1"/>
+            </ObjectPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Flow"/>
+                <Variable IRI="#F2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#F2"/>
+                <Literal>Ft</Literal>
+            </DataPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFlow"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#F2"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasDeviation"/>
+                <Variable IRI="#F1"/>
+                <Variable IRI="#D1"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasDeviation"/>
+                <Variable IRI="#F2"/>
+                <Variable IRI="#D2"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Healthy state</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S6</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>HealthyS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#A"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasCurrentValue"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#A"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThanOrEqual">
+                <Variable IRI="#A"/>
+                <Variable IRI="#B"/>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasAlertThreshold"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#B"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Identifier"/>
+                <Variable IRI="#I1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasID"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#I1"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasIDvalue"/>
+                <Variable IRI="#I1"/>
+                <Literal>M1</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#ProcessState"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>HealthyPS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Function"/>
+                <Variable IRI="#F1"/>
+            </ClassAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFunction"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#F1"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Alert state</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S7</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>AlertS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasAlertThreshold"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#B"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasAlarmThreshold"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#C"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#A"/>
+                <Variable IRI="#B"/>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasCurrentValue"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#A"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#lessThanOrEqual">
+                <Variable IRI="#A"/>
+                <Variable IRI="#C"/>
+            </BuiltInAtom>
+            <ClassAtom>
+                <Class IRI="#Identifier"/>
+                <Variable IRI="#I1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasID"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#I1"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasIDvalue"/>
+                <Variable IRI="#I1"/>
+                <Literal>M1</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#ProcessState"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>FAlertPS</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Alarm state</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S8</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>AlarmS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasAlarmThreshold"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#C"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#greaterThan">
+                <Variable IRI="#A"/>
+                <Variable IRI="#C"/>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasCurrentValue"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#A"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Identifier"/>
+                <Variable IRI="#I1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasID"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#I1"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasIDvalue"/>
+                <Variable IRI="#I1"/>
+                <Literal>M1</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#ProcessState"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>FAlarmPS</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Zero-case: faulty state with coil not changing</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S10</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>FaultyS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
+                <Variable IRI="#A"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasCurrentValue"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#A"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Identifier"/>
+                <Variable IRI="#I1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasID"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#I1"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasIDvalue"/>
+                <Variable IRI="#I1"/>
+                <Literal>M1</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#ProcessState"/>
+                <Variable IRI="#PS1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#PS1"/>
+                <Literal>SBPS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#StateOfFailure"/>
+                <Variable IRI="#SF1"/>
+            </ClassAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasFailureState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#SF1"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>Zero-case: healthy state with coil changing</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S9</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#State"/>
+                <Variable IRI="#S1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#S1"/>
+                <Literal>HealthyS</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Component"/>
+                <Variable IRI="#C1"/>
+            </ClassAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#equal">
+                <Variable IRI="#A"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#integer">0</Literal>
+            </BuiltInAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasCurrentValue"/>
+                <Variable IRI="#V1"/>
+                <Variable IRI="#A"/>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Identifier"/>
+                <Variable IRI="#I1"/>
+            </ClassAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasID"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#I1"/>
+            </ObjectPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasIDvalue"/>
+                <Variable IRI="#I1"/>
+                <Literal>M1</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#ProcessState"/>
+                <Variable IRI="#PS1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#PS1"/>
+                <Literal>CoilCPS</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#hasState"/>
+                <Variable IRI="#C1"/>
+                <Variable IRI="#S1"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>The coil is not changing v3</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S5</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasHorizontalPosition"/>
+                <Variable IRI="#V1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasVerticalPosition"/>
+                <Variable IRI="#V2"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>The coil is changing</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S2</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasHorizontalPosition"/>
+                <Variable IRI="#V1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasVerticalPosition"/>
+                <Variable IRI="#V2"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>The coil is not changing v2</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S4</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasHorizontalPosition"/>
+                <Variable IRI="#V1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasVerticalPosition"/>
+                <Variable IRI="#V2"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal>The coil is not changing v1</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal>S3</Literal>
+        </Annotation>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V1"/>
+            </ClassAtom>
+            <ClassAtom>
+                <Class IRI="#Product"/>
+                <Variable IRI="#P1"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasHorizontalPosition"/>
+                <Variable IRI="#V1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+            <ClassAtom>
+                <Class IRI="#Variable"/>
+                <Variable IRI="#V2"/>
+            </ClassAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasVerticalPosition"/>
+                <Variable IRI="#V2"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#hasLabel"/>
+                <Variable IRI="#P1"/>
+                <Literal>Bob1</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <DataPropertyAtom>
+                <DataProperty IRI="#isChanging"/>
+                <Variable IRI="#P1"/>
+                <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">false</Literal>
+            </DataPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#AccumulatorMotor</IRI>
+        <Literal>Motor = motor + reductor</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#AccumulatorPulleyBeltSystem</IRI>
+        <Literal>PulleyBeltSystem = 2 pulleys + 1 belt</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Component</IRI>
+        <Literal>TO VERIFY TO DISJOIN BETWEEN:
+
+- MACHINE COMPONENT
+- PRODUCT COMPONENT</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#ConditionMonitoring</IRI>
+        <Literal>From Polenghi 2022:
+
+BFO:Process to monitor an AO:Artifact by measuring a specific phenomenon</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#CyclicPreventiveMaintenanceElapsedInterval</IRI>
+        <Literal>Commento:
+
+- migliorare il termine
+
+From Montero et al. 2012 (TBN, noi abbiamo cambiato termine):
+
+A COMSA: triggering event subclass related to preventive maintenance strategy. It is prescribed by a preventive maintenance plan. A recommendation based on fixed operation intervals or from fixed basic inspections triggers a maintenance action.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#DegradationProcess</IRI>
+        <Literal>From IOF and Karray 2019:
+
+A BFO:Process that results in the loss of ability to perform a BFO:Function.
+The loss of ability of a component or engineering system to perform its required function.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#DegradationThresholdOvershoot</IRI>
+        <Literal>Commento:
+
+- anche con la predictive superi una threshold, solo che è predetta, mentre nella cbm NO PRED è attuale basata sul monitoraggio
+
+From Montero et al. 2021:
+
+A COMSA: triggering event subclass related to predictive maintenance strategy. It is prescribed by a degradation assessment module of a predictive maintenance system.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Deviation</IRI>
+        <Literal>- valutare legame con &quot;non conformity&quot; come deviation of product quality</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Deviation</IRI>
+        <Literal>general definition:
+
+difference between requirements* and actual performance
+
+* requirements of products (e.g. dimensional tolerances) and process (e.g. energy absorption)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#ElectromechanicalFailureMode</IRI>
+        <Literal>From Medina et al. 2014:
+
+tipologie di guasto definite
+Da migliorare:
+- separazione hydraulic/pneumatic (già fatta)
+- definizioni
+- relazioni (vedere comunque Medina)
+
+vedere comunque Nunez &amp; Borsato per tipologie failure mode (forse)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Ent_bob_abou</IRI>
+        <Literal>Coil in changing position (vertical)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Ent_bob_cour</IRI>
+        <Literal>Coil in current position (horizontal)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#FailureCauseID</IRI>
+        <Literal>TO BE VERIFIED AND EVENTUALLY RE-ALLOCATED</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#FailureMode</IRI>
+        <Literal>From IOF:
+
+Def. A BFO:Realizable Entity that is the UNK:Consequence of a MNT:FailureMechanism through which the MNT:StateOfFailue occurs</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#FailureModeID</IRI>
+        <Literal>Originally as information:
+
+From Montero et al. 2021
+
+A CCO: Descriptive Information Content Entity that describes the cause of a failure mode. It is about a CCO: Cause that can lead to an OMSSA: Failure</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#FailureModeID</IRI>
+        <Literal>TO BE VERIFIED AND EVENTUALLY RE-ALLOCATED</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Flow</IRI>
+        <Literal>Class added in order to be able to infer the relation between the measured variable and the negative deviations of the non-measurable variable (Sofia and Julie)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Function</IRI>
+        <Literal>A function is a disposition that exists in virtue of the bearer’s physical make-up and this physical make-up is something the bearer possesses because it came into being, either through evolution (in the case of natural biological entities) or through intentional design (in the case of artifacts), in order to realize processes of a certain sort. (axiom label in BFO2 Reference: [064-001])</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Function</IRI>
+        <Literal>BFO 2 Reference: In the past, we have distinguished two varieties of function, artifactual function and biological function. These are not asserted subtypes of BFO:function however, since the same function – for example: to pump, to transport – can exist both in artifacts and in biological entities. The asserted subtypes of function that would be needed in order to yield a separate monoheirarchy are not artifactual function, biological function, etc., but rather transporting function, pumping function, etc.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Function</IRI>
+        <Literal>vedi bene IOF + vedere una tassonomia (forse CCO)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#HealthAssessment</IRI>
+        <Literal>Together with PrognosticAssessment
+
+This may be excluded or not depending on the final goal of the ontology.
+They could be excluded if the ontology is a mean to support maintenance analyses, whereas they are part of the ontology if we want to describe the maintenance domain as external viewer.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#InformationContentEntity</IRI>
+        <Literal>consider relation &quot;isAbout&quot; with Continuant or Process</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Machine</IRI>
+        <Literal>Out comment:
+
+an asset that transforms the product</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#MaintenanceAction</IRI>
+        <Literal>From IOF:
+
+Def. A BFO:Process to perform work on an IOF:Component according to a MNT:Maintenance_Work_Specification.
+One of more tasks necessary to retain an item in or restore it to a specified condition.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#MaintenanceProcess</IRI>
+        <Literal>From IOF:
+
+A BFO:Process comprised of MNT:MaintenanceAction to retain or restore an MNT:MaintainableItem to perform a BFO:Function.
+All activities necessary to retain or restore the functionality of an asset.</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#MaintenanceProcess</IRI>
+        <Literal>With respect to norm 17007.
+
+Maintenance processes could be classified into:
+- maintenance action
+- maintenance management
+- maintenance support processes</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#MaterialArtifact</IRI>
+        <Literal>To define the subclasses of artifacts, it could be useful to use general class axioms like:
+
+product is an artifact and it bears a product role
+
+the same for &quot;function&quot;?</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Nonconformity</IRI>
+        <Literal>deviation</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Nonconformity</IRI>
+        <Literal>non conformity equivalent = Deviation + don&apos;t meet Requirement</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Object</IRI>
+        <Literal>where is the human?</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Otr_acc</IRI>
+        <Literal>Accumulator motor couple</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#PrimaryFailureCause</IRI>
+        <Literal>From IOF:
+
+A BFO:Occurrent that have led to a MNT:State_Of_Failure_Machine or  MNT:State_Of_Failure_Component</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#ProcessRequirement</IRI>
+        <Literal>it could be useful maybe:
+- transportation process
+- manufacturing process</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#QuantitativeDeviation</IRI>
+        <Literal>Norm 61882</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Requirement</IRI>
+        <Literal>product req and process req as subclasses?</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Rfrd_acc</IRI>
+        <Literal>Accumulator motor speed (turn/min)</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#State</IRI>
+        <Literal>From Karray et al. 2019:
+
+A BFO:Process in which some BFO:independent continuant endures and one or more of the dependent entities it bears does not change in kind or intensity</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#StateOfFailure</IRI>
+        <Literal>Commento Chiara/Ada:
+
+physical failure non ci serve! non facciamo manutenzione quanto una cosa è rotta pèerchè è rotta, ma perchè non fa più la funzione richiesta
+
+TBN: lo stato in cui è fisicamente rotto sarà da modellare, ma non come failure, quanto come una situazione in cui l&apos;asset è</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#StateOfFailure</IRI>
+        <Literal>From Karray et al. 2019:
+
+A ROM:state during which a CCO:artifact is unable to perform its BFO:function</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Tool</IRI>
+        <Literal>From IOF:
+
+An Artifact that is designed to assist in the performance of manual or mechanical work and not to be consumed in that process
+
+TBR</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#TriggeringEvent</IRI>
+        <Literal>From Karray et al. 2019:
+A BFO:process resulting in an action.
+
+From Montero et al. 2021:
+A BFO: process boundary that is the starting point for a maintenance action</Literal>
+    </AnnotationAssertion>
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#Variable</IRI>
+        <Literal>For example: the variable measured by the sensor
+
+Correction (Julie/Sofia/Chiara):
+isMeasuredBy some Indicator -&gt; isMeasuredBy some Sensor</Literal>
+    </AnnotationAssertion>
+</Ontology>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
