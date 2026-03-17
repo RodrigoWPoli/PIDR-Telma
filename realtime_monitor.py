@@ -29,7 +29,23 @@ DATABASE_NAME   = "telma"
 COLLECTION_NAME = "data"
 
 # Variables extracted from each MongoDB document
-WATCHED_VARIABLES = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production"]
+WATCHED_VARIABLES = [
+    # Core fault detection
+    "Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production",
+    # Accumulator motor diagnostics
+    "TempMoteur_acc", "Lcr_acc", "Uop_acc",
+    "Courroie_accu_tendue", "Courroie_accu_detendue",
+    # Advance motor
+    "Otr_av", "Rfrd_av", "TempMoteur_av", "Lcr_av", "Uop_av",
+    # Production counters
+    "Cpt_nb_piece", "Cpt_nb_bobine", "Nombre_tours", "Dim_piece",
+    # Electrical
+    "CourantA", "CourantB", "CourantC", "CourantTot",
+    # Safety
+    "Ent_au",
+    # Drive verification
+    "diActTorque", "diActlVelo",
+]
 
 # Visual indicators for each state
 STATE_DISPLAY = {

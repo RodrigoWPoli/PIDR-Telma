@@ -48,7 +48,23 @@ def get_latest_values() -> dict:
     db         = client[DATABASE_NAME]
     collection = db[COLLECTION_NAME]
 
-    variables = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production"]
+    variables = [
+        # Core fault detection
+        "Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production",
+        # Accumulator motor diagnostics
+        "TempMoteur_acc", "Lcr_acc", "Uop_acc",
+        "Courroie_accu_tendue", "Courroie_accu_detendue",
+        # Advance motor
+        "Otr_av", "Rfrd_av", "TempMoteur_av", "Lcr_av", "Uop_av",
+        # Production counters
+        "Cpt_nb_piece", "Cpt_nb_bobine", "Nombre_tours", "Dim_piece",
+        # Electrical
+        "CourantA", "CourantB", "CourantC", "CourantTot",
+        # Safety
+        "Ent_au",
+        # Drive verification
+        "diActTorque", "diActlVelo",
+    ]
     latest    = {}
     for var in variables:
         doc = collection.find_one(
@@ -248,4 +264,3 @@ if __name__ == "__main__":
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
     run_pipeline(verbose=args.verbose)
-    

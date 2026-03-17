@@ -8,11 +8,29 @@ Usage:
 """
 
 import time
+import socket
+import threading
+import subprocess
 import pymongo
 import streamlit as st
 import plotly.graph_objects as go
 from datetime import datetime
 from update_ontology import infer_state, load_ontology, update_data_properties
+
+
+# ── VPN check ─────────────────────────────────────────────────────────────────
+def check_vpn() -> tuple[bool, str]:
+    """
+    Tests connectivity to the TELMA PLC OPC-UA server.
+    Returns (is_connected, status_message).
+    Uses a TCP socket — no ping required.
+    """
+    try:
+        s = socket.create_connection(("100.65.63.65", 4840), timeout=2)
+        s.close()
+        return True, "VPN connected · PLC reachable"
+    except OSError:
+        return False, "VPN disconnected · PLC unreachable"
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
@@ -39,7 +57,7 @@ st.set_page_config(
     page_title="TELMA — Fault Detection",
     page_icon="⚙",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 st.markdown("""
@@ -80,9 +98,15 @@ def get_ontology():
 
 def get_latest_values():
     col = get_mongo()[DATABASE_NAME][COLLECTION_NAME]
-    variables = ["Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou",
-                 "En_Production", "TempMoteur_acc", "Lcr_acc",
-                 "Courroie_accu_tendue", "Courroie_accu_detendue"]
+    variables = [
+        "Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou",
+        "En_Production", "TempMoteur_acc", "Lcr_acc", "Uop_acc",
+        "Courroie_accu_tendue", "Courroie_accu_detendue",
+        "Otr_av", "Rfrd_av", "TempMoteur_av", "Lcr_av", "Uop_av",
+        "Cpt_nb_piece", "Cpt_nb_bobine", "Nombre_tours", "Dim_piece",
+        "CourantA", "CourantB", "CourantC", "CourantTot",
+        "Ent_au", "diActTorque", "diActlVelo",
+    ]
     latest = {}
     for var in variables:
         doc = col.find_one({var: {"$exists": True}},
@@ -111,9 +135,117 @@ if "state_history" not in st.session_state:
     st.session_state.state_history = []
 if "last_state" not in st.session_state:
     st.session_state.last_state = None
+if "collection_process" not in st.session_state:
+    st.session_state.collection_process = None
+if "collection_log" not in st.session_state:
+    st.session_state.collection_log = []
+if "ontology_log" not in st.session_state:
+    st.session_state.ontology_log = []
 if "initialized" not in st.session_state:
     st.session_state.initialized = True
     st.rerun()
+
+
+# ── Sidebar ────────────────────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("### Controls")
+    st.markdown("<hr style='margin:0.5rem 0;'>", unsafe_allow_html=True)
+
+    # ── VPN status ────────────────────────────────────────────────────────────
+    st.markdown("**Network**")
+    vpn_ok, vpn_msg = check_vpn()
+    if vpn_ok:
+        st.success(vpn_msg, icon="✅")
+    else:
+        st.error(vpn_msg, icon="🔴")
+
+    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+    # ── Data collection ───────────────────────────────────────────────────────
+    st.markdown("**Data collection**")
+
+    proc = st.session_state.collection_process
+    is_running = proc is not None and proc.poll() is None
+
+    if is_running:
+        st.success("Collecting — running", icon="⏺️")
+        if st.button("Stop collection", use_container_width=True):
+            proc.terminate()
+            proc.wait(timeout=3)
+            st.session_state.collection_process = None
+            st.session_state.collection_log.insert(
+                0, f"{datetime.now().strftime('%H:%M:%S')} — stopped (wait ~10s before restarting)")
+            st.rerun()
+    else:
+        if proc is not None:
+            exit_code = proc.poll()
+            if exit_code != 0:
+                st.warning("Collection stopped unexpectedly. Check data/collection.log", icon="⚠️")
+            st.session_state.collection_log.insert(
+                0, f"{datetime.now().strftime('%H:%M:%S')} — finished (exit {exit_code})")
+            st.session_state.collection_process = None
+
+        if st.button("Start collection", use_container_width=True,
+                     type="primary", disabled=not vpn_ok):
+            import os, sys
+            script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  "data_collection.py")
+            p = subprocess.Popen(
+                [sys.executable, script],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+            st.session_state.collection_process = p
+            st.session_state.collection_log.insert(
+                0, f"{datetime.now().strftime('%H:%M:%S')} — started")
+            st.rerun()
+
+    # Collection log
+    if st.session_state.collection_log:
+        for entry in st.session_state.collection_log[:4]:
+            st.caption(entry)
+
+    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+    # ── Ontology update ───────────────────────────────────────────────────────
+    st.markdown("**Ontology**")
+
+    if st.button("Update ontology now", use_container_width=True):
+        try:
+            onto_inst = get_ontology()
+            vals = get_latest_values()
+            if vals:
+                update_data_properties(onto_inst, vals)
+                ts = datetime.now().strftime("%H:%M:%S")
+                otr = float(vals.get("Otr_acc", 0))
+                st.session_state.ontology_log.insert(
+                    0, f"{ts} — updated (Otr_acc={otr:.1f})")
+                st.success("Ontology updated", icon="✅")
+            else:
+                st.warning("No data in MongoDB")
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+    if st.session_state.ontology_log:
+        for entry in st.session_state.ontology_log[:4]:
+            st.caption(entry)
+
+    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+    # ── Settings ──────────────────────────────────────────────────────────────
+    st.markdown("**Settings**")
+    REFRESH_INTERVAL = st.slider(
+        "Refresh interval (s)", min_value=1, max_value=10,
+        value=REFRESH_INTERVAL, step=1
+    )
+    if st.button("Clear state history", use_container_width=True):
+        st.session_state.state_history = []
+        st.session_state.last_state = None
+        st.rerun()
+
+    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+    st.caption("TELMA Fault Detection · PIDR n°30")
+    st.caption("CRAN / MPSI · Université de Lorraine")
 
 
 # ── Render ─────────────────────────────────────────────────────────────────────
@@ -276,5 +408,56 @@ with right:
 # Auto-refresh
 st.markdown(f"<p style='text-align:center;color:#ccc;font-size:11px;margin-top:1.5rem;'>"
             f"auto-refresh every {REFRESH_INTERVAL}s</p>", unsafe_allow_html=True)
+
+# ── Advance motor ──────────────────────────────────────────────────────────────
+st.markdown("<hr style='border:none;border-top:0.5px solid #e5e5e5;margin:1rem 0 0.5rem;'>",
+            unsafe_allow_html=True)
+st.markdown("<div class='panel-title'>Advance motor</div>", unsafe_allow_html=True)
+a1, a2, a3, a4, a5 = st.columns(5)
+with a1: st.metric("Torque",      f"{float(values.get('Otr_av', 0)):.0f} Nm")
+with a2: st.metric("Speed",       f"{float(values.get('Rfrd_av', 0)):.0f} rpm")
+with a3: st.metric("Temperature", f"{float(values.get('TempMoteur_av', 0)):.1f} \u00b0C")
+with a4: st.metric("Current",     f"{float(values.get('Lcr_av', 0)):.2f} A")
+with a5: st.metric("Voltage",     f"{float(values.get('Uop_av', 0)):.0f} V")
+
+# ── Production & electrical ────────────────────────────────────────────────────
+st.markdown("<div style='margin-top:0.5rem;'></div>", unsafe_allow_html=True)
+p1, p2 = st.columns(2)
+
+with p1:
+    st.markdown("<div class='panel-title'>Production</div>", unsafe_allow_html=True)
+    eu_class = "signal-true" if values.get("Ent_au") else "signal-false"
+    eu_text  = "ACTIVE" if values.get("Ent_au") else "OK"
+    prod_html = (
+        f'<div class="signal-row"><span class="signal-label">Pieces produced</span>'
+        f'<span style="font-weight:500;">{int(values.get("Cpt_nb_piece", 0))}</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Coils used</span>'
+        f'<span style="font-weight:500;">{int(values.get("Cpt_nb_bobine", 0))}</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Current turns</span>'
+        f'<span style="font-weight:500;">{int(values.get("Nombre_tours", 0))}</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Piece dimension</span>'
+        f'<span style="font-weight:500;">{int(values.get("Dim_piece", 0))}</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Emergency stop</span>'
+        f'<span class="{eu_class}">{eu_text}</span></div>'
+    )
+    st.markdown(prod_html, unsafe_allow_html=True)
+
+with p2:
+    st.markdown("<div class='panel-title'>Electrical (powertag)</div>",
+                unsafe_allow_html=True)
+    elec_html = (
+        f'<div class="signal-row"><span class="signal-label">Phase A</span>'
+        f'<span style="font-weight:500;">{float(values.get("CourantA", 0)):.2f} A</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Phase B</span>'
+        f'<span style="font-weight:500;">{float(values.get("CourantB", 0)):.2f} A</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Phase C</span>'
+        f'<span style="font-weight:500;">{float(values.get("CourantC", 0)):.2f} A</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Total (A+B+C)</span>'
+        f'<span style="font-weight:500;">{float(values.get("CourantTot", 0)):.2f} A</span></div>'
+        f'<div class="signal-row"><span class="signal-label">Accu voltage</span>'
+        f'<span style="font-weight:500;">{float(values.get("Uop_acc", 0)):.0f} V</span></div>'
+    )
+    st.markdown(elec_html, unsafe_allow_html=True)
+
 time.sleep(REFRESH_INTERVAL)
 st.rerun()

@@ -31,18 +31,37 @@ SAMPLING_INTERVAL = 1.0
 # Variables to monitor — (name, node_id, type)
 # Node IDs confirmed from PLC embedded server (GVL_OPC namespace)
 MONITORED_VARIABLES = [
-    # Core variables for fault detection
+    # ── Core fault detection ───────────────────────────────────────────────────
     ("Otr_acc",       "ns=2;s=Application.GVL_OPC.Otr_acc",       "Int16"),
     ("Rfrd_acc",      "ns=2;s=Application.GVL_OPC.Rfrd_acc",       "Int16"),
     ("Ent_bob_cour",  "ns=2;s=Application.GVL_OPC.Ent_bob_cour",   "Boolean"),
     ("Ent_bob_abou",  "ns=2;s=Application.GVL_OPC.Ent_bob_abou",   "Boolean"),
     ("En_Production", "ns=2;s=Application.GVL_OPC.En_Production",  "Boolean"),
-    # Diagnostics
+    # ── Accumulator motor diagnostics ─────────────────────────────────────────
     ("TempMoteur_acc","ns=2;s=Application.GVL_OPC.TempMoteur_acc", "Int16"),
     ("Lcr_acc",       "ns=2;s=Application.GVL_OPC.Lcr_acc",        "Float"),
+    ("Uop_acc",       "ns=2;s=Application.GVL_OPC.Uop_acc",        "Int16"),
     ("Courroie_accu_tendue",   "ns=2;s=Application.GVL_OPC.Courroie_accu_tendue",   "Boolean"),
     ("Courroie_accu_detendue", "ns=2;s=Application.GVL_OPC.Courroie_accu_detendue", "Boolean"),
-    # Raw torque/speed from drive (for scale factor verification)
+    # ── Advance motor (useful for Phase 5 belt wear scenario) ─────────────────
+    ("Otr_av",        "ns=2;s=Application.GVL_OPC.Otr_av",         "Int16"),
+    ("Rfrd_av",       "ns=2;s=Application.GVL_OPC.Rfrd_av",        "Int16"),
+    ("TempMoteur_av", "ns=2;s=Application.GVL.TempAvance",          "Float"),
+    ("Lcr_av",        "ns=2;s=Application.GVL_OPC.Lcr_av",         "Float"),
+    ("Uop_av",        "ns=2;s=Application.GVL_OPC.Uop_av",         "Int16"),
+    # ── Production counters ────────────────────────────────────────────────────
+    ("Cpt_nb_piece",  "ns=2;s=Application.GVL_OPC.Cpt_nb_piece",   "Int16"),
+    ("Cpt_nb_bobine", "ns=2;s=Application.GVL_OPC.Cpt_nb_bobine",  "Int16"),
+    ("Nombre_tours",  "ns=2;s=Application.GVL_OPC.Nombre_tours",   "Int16"),
+    ("Dim_piece",     "ns=2;s=Application.GVL_OPC.Dim_piece",       "Int16"),
+    # ── Electrical (powertag) ─────────────────────────────────────────────────
+    ("CourantA",      "ns=2;s=Application.GVL.CourantA",            "Float"),
+    ("CourantB",      "ns=2;s=Application.GVL.CourantB",            "Float"),
+    ("CourantC",      "ns=2;s=Application.GVL.CourantC",            "Float"),
+    ("CourantTot",    "ns=2;s=Application.GVL_OPC.CourantTot",      "Float"),
+    # ── Safety ────────────────────────────────────────────────────────────────
+    ("Ent_au",        "ns=2;s=Application.GVL_OPC.Ent_au",          "Boolean"),
+    # ── Raw drive values (scale factor verification) ──────────────────────────
     ("diActTorque",   "ns=2;s=Application.GVL_ATV320_Accu.diActTorque", "Int16"),
     ("diActlVelo",    "ns=2;s=Application.GVL_ATV320_Accu.diActlVelo",  "Int16"),
 ]
@@ -83,6 +102,27 @@ def read_all_variables(opc_client: Client) -> dict:
     return readings
 
 
+def is_connected(opc_client: Client) -> bool:
+    """Check if the OPC-UA client connection is still alive."""
+    try:
+        opc_client.get_node("i=84").get_browse_name()
+        return True
+    except Exception:
+        return False
+
+
+def reconnect(opc_client: Client) -> Client:
+    """Attempt to disconnect cleanly and create a fresh client."""
+    try:
+        opc_client.disconnect()
+    except Exception:
+        pass
+    new_client = Client(OPC_SERVER_URL)
+    new_client.session_timeout = 30000
+    new_client.connect()
+    return new_client
+
+
 def has_changed(current: dict, previous: dict) -> dict:
     """Returns only the variables whose value changed since last reading."""
     changed = {}
@@ -117,21 +157,46 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
     print(f"Connecting to OPC-UA server: {OPC_SERVER_URL}")
     print("(Make sure AIPL VPN is connected)\n")
 
-    opc_client = Client(OPC_SERVER_URL)
+    # Ensure output directory exists before anything else
+    if csv_output:
+        import os
+        csv_dir = os.path.dirname(csv_output)
+        if csv_dir:
+            os.makedirs(csv_dir, exist_ok=True)
 
     csv_file   = None
     csv_writer = None
 
-    # Ensure output directory exists
-    if csv_output:
-        import os
-        os.makedirs(os.path.dirname(csv_output), exist_ok=True)
+    MAX_CONNECT_RETRIES = 5
+    RETRY_DELAY         = 5
 
+    # ── Connect with retry ─────────────────────────────────────────────────────
+    opc_client = Client(OPC_SERVER_URL)
+    opc_client.session_timeout = 30000
+
+    for attempt in range(1, MAX_CONNECT_RETRIES + 1):
+        try:
+            opc_client.connect()
+            print("✓ OPC-UA connected\n")
+            break
+        except Exception as e:
+            if "BadTooManySessions" in str(e):
+                print(f"  Server session limit reached (attempt {attempt}/{MAX_CONNECT_RETRIES}).")
+                if attempt < MAX_CONNECT_RETRIES:
+                    print(f"  Waiting {RETRY_DELAY}s for sessions to expire...")
+                    time.sleep(RETRY_DELAY)
+                    opc_client = Client(OPC_SERVER_URL)
+                    opc_client.session_timeout = 30000
+                else:
+                    raise RuntimeError(
+                        f"Could not connect after {MAX_CONNECT_RETRIES} attempts. "
+                        "Wait ~30s for old sessions to expire, then try again."
+                    ) from e
+            else:
+                raise
+
+    # ── Main loop ──────────────────────────────────────────────────────────────
     try:
-        opc_client.connect()
-        print("✓ OPC-UA connected\n")
-
-        # Set up CSV if requested
         if csv_output:
             csv_file   = open(csv_output, "w", newline="")
             csv_writer = csv.writer(csv_file)
@@ -153,6 +218,17 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
 
             loop_start = time.time()
 
+            # Check connection health and reconnect if needed
+            if not is_connected(opc_client):
+                print(f"  [{datetime.now().strftime('%H:%M:%S')}] Connection lost — reconnecting...")
+                try:
+                    opc_client = reconnect(opc_client)
+                    print(f"  [{datetime.now().strftime('%H:%M:%S')}] Reconnected.")
+                except Exception as e:
+                    print(f"  Reconnect failed: {e} — retrying in 5s...")
+                    time.sleep(5)
+                    continue
+
             current_values = read_all_variables(opc_client)
             changed        = has_changed(current_values, previous_values)
 
@@ -160,18 +236,17 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
                 store_in_mongodb(changed)
                 previous_values.update(changed)
 
-                # Also write to CSV (full row, not just changed)
                 if csv_writer:
                     row = [datetime.now(timezone.utc).isoformat()]
                     for name in VARIABLE_NAMES:
                         val = current_values.get(name, {}).get("value", "")
                         row.append(val)
                     csv_writer.writerow(row)
+                    csv_file.flush()
 
                 changed_names = list(changed.keys())
                 print(f"  [{datetime.now().strftime('%H:%M:%S')}] Changed: {changed_names}")
 
-            # Sleep for remainder of interval
             elapsed    = time.time() - loop_start
             sleep_time = max(0, SAMPLING_INTERVAL - elapsed)
             time.sleep(sleep_time)

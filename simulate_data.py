@@ -80,13 +80,39 @@ def simulate_scenario(
         otr_value = round(random.uniform(*otr_range) / SCALE_FACTOR)
 
         values = {
+            # Core
             "Otr_acc":        int(otr_value),
             "Rfrd_acc":       rfrd_value,
             "Ent_bob_cour":   True,
             "Ent_bob_abou":   False,
             "En_Production":  True,
+            # Accumulator motor diagnostics
             "TempMoteur_acc": round(random.uniform(35.0, 45.0), 1),
-            "Lcr_acc":        round(random.uniform(1.5, 2.5), 2),
+            "Lcr_acc":        round(random.uniform(0.8, 1.2), 2),
+            "Uop_acc":        round(random.uniform(220, 240)),
+            "Courroie_accu_tendue":   True,
+            "Courroie_accu_detendue": False,
+            # Advance motor (similar range to accumulator)
+            "Otr_av":         round(random.uniform(8, 15)),
+            "Rfrd_av":        round(random.uniform(400, 600)),
+            "TempMoteur_av":  round(random.uniform(33.0, 43.0), 1),
+            "Lcr_av":         round(random.uniform(0.7, 1.1), 2),
+            "Uop_av":         round(random.uniform(220, 240)),
+            # Production counters
+            "Cpt_nb_piece":   random.randint(0, 200),
+            "Cpt_nb_bobine":  random.randint(0, 10),
+            "Nombre_tours":   random.randint(1, 200),
+            "Dim_piece":      2,
+            # Electrical
+            "CourantA":       round(random.uniform(0.6, 0.8), 2),
+            "CourantB":       round(random.uniform(0.2, 0.3), 2),
+            "CourantC":       round(random.uniform(0.15, 0.25), 2),
+            "CourantTot":     round(random.uniform(1.0, 1.3), 2),
+            # Safety
+            "Ent_au":         False,
+            # Drive verification
+            "diActTorque":    int(otr_value),
+            "diActlVelo":     rfrd_value,
         }
         insert_reading(values, current_time)
         current_time += timedelta(seconds=interval_seconds)
@@ -119,9 +145,28 @@ def simulate_coil_change(start_time: datetime, interval_seconds: float = 1.0) ->
     ]
 
     for step in steps:
-        step["En_Production"]  = True
-        step["TempMoteur_acc"] = 38.0
-        step["Lcr_acc"]        = 0.0
+        step["En_Production"]           = True
+        step["TempMoteur_acc"]          = 38.0
+        step["Lcr_acc"]                 = 0.0
+        step["Uop_acc"]                 = 0
+        step["Courroie_accu_tendue"]    = False
+        step["Courroie_accu_detendue"]  = True
+        step["Otr_av"]                  = 0
+        step["Rfrd_av"]                 = 0
+        step["TempMoteur_av"]           = 36.0
+        step["Lcr_av"]                  = 0.0
+        step["Uop_av"]                  = 0
+        step["Cpt_nb_piece"]            = 0
+        step["Cpt_nb_bobine"]           = 0
+        step["Nombre_tours"]            = 0
+        step["Dim_piece"]               = 2
+        step["CourantA"]                = 0.0
+        step["CourantB"]                = 0.0
+        step["CourantC"]                = 0.0
+        step["CourantTot"]              = 0.0
+        step["Ent_au"]                  = False
+        step["diActTorque"]             = 0
+        step["diActlVelo"]              = 0
         insert_reading(step, current_time)
         current_time += timedelta(seconds=interval_seconds)
 
@@ -189,29 +234,34 @@ def run_full_simulation(clear_first: bool = False) -> None:
     print("\n  [Faulty] Simulating stopped motor during production (Otr_acc=0, coil not changing)...")
     for i in range(5):
         insert_reading({
-            "Otr_acc":        0,
-            "Rfrd_acc":       0,
-            "Ent_bob_cour":   True,
-            "Ent_bob_abou":   False,
-            "En_Production":  True,   # still in production → Faulty
-            "TempMoteur_acc": 55.0,
-            "Lcr_acc":        0.0,
+            "Otr_acc": 0, "Rfrd_acc": 0,
+            "Ent_bob_cour": True, "Ent_bob_abou": False, "En_Production": True,
+            "TempMoteur_acc": 55.0, "Lcr_acc": 0.0, "Uop_acc": 0,
+            "Courroie_accu_tendue": False, "Courroie_accu_detendue": True,
+            "Otr_av": 0, "Rfrd_av": 0, "TempMoteur_av": 40.0,
+            "Lcr_av": 0.0, "Uop_av": 0,
+            "Cpt_nb_piece": 0, "Cpt_nb_bobine": 0, "Nombre_tours": 0, "Dim_piece": 2,
+            "CourantA": 0.0, "CourantB": 0.0, "CourantC": 0.0, "CourantTot": 0.0,
+            "Ent_au": False, "diActTorque": 0, "diActlVelo": 0,
         }, t + timedelta(seconds=i))
     t += timedelta(seconds=5)
     print("    ✓ 5 faulty readings inserted")
 
     # ── Phase 5: Machine stopped normally → Stopped (not a fault) ─────────────
     print("\n  [Stopped] Simulating normal machine stop (En_Production=False)...")
+    stop_time = datetime.now(timezone.utc)
     for i in range(5):
         insert_reading({
-            "Otr_acc":        0,
-            "Rfrd_acc":       0,
-            "Ent_bob_cour":   True,
-            "Ent_bob_abou":   False,
-            "En_Production":  False,  # machine off → Stopped (normal)
-            "TempMoteur_acc": 35.0,
-            "Lcr_acc":        0.0,
-        }, t + timedelta(seconds=i))
+            "Otr_acc": 0, "Rfrd_acc": 0,
+            "Ent_bob_cour": True, "Ent_bob_abou": False, "En_Production": False,
+            "TempMoteur_acc": 35.0, "Lcr_acc": 0.0, "Uop_acc": 0,
+            "Courroie_accu_tendue": False, "Courroie_accu_detendue": True,
+            "Otr_av": 0, "Rfrd_av": 0, "TempMoteur_av": 33.0,
+            "Lcr_av": 0.0, "Uop_av": 0,
+            "Cpt_nb_piece": 0, "Cpt_nb_bobine": 0, "Nombre_tours": 0, "Dim_piece": 2,
+            "CourantA": 0.0, "CourantB": 0.0, "CourantC": 0.0, "CourantTot": 0.0,
+            "Ent_au": False, "diActTorque": 0, "diActlVelo": 0,
+        }, stop_time + timedelta(seconds=i))
     print("    ✓ 5 stopped readings inserted")
 
     # ── Summary ────────────────────────────────────────────────────────────────

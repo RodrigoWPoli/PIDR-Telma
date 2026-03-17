@@ -143,8 +143,36 @@ When Alert or Alarm:
 | VPN required | AIPL VPN |
 | Key variables | `Otr_acc`, `Rfrd_acc`, `Ent_bob_cour`, `Ent_bob_abou` |
 
-All variable node IDs follow the pattern `ns=2;s=0:TELMA!<VariableName>`.  
-Full variable list with descriptions: `OPCUA_variables.csv` in the project root.
+All variable node IDs use the PLC embedded server (`opc.tcp://100.65.63.65:4840`). Most variables are in the `Application.GVL_OPC` namespace; four exceptions are in `Application.GVL`:
+
+| Variable | Namespace | Type | Description |
+|----------|-----------|------|-------------|
+| `Otr_acc` | GVL_OPC | Int16 | Accumulator motor torque (Nm) |
+| `Rfrd_acc` | GVL_OPC | Int16 | Accumulator motor speed (rpm) |
+| `Ent_bob_cour` | GVL_OPC | Boolean | Coil in current position |
+| `Ent_bob_abou` | GVL_OPC | Boolean | Coil in changing position |
+| `En_Production` | GVL_OPC | Boolean | Production cycle active |
+| `TempMoteur_acc` | GVL_OPC | Int16 | Accumulator motor temperature (°C) |
+| `Lcr_acc` | GVL_OPC | Float | Accumulator motor current (A) |
+| `Uop_acc` | GVL_OPC | Int16 | Accumulator motor voltage (V) |
+| `Courroie_accu_tendue` | GVL_OPC | Boolean | Belt tensioned |
+| `Courroie_accu_detendue` | GVL_OPC | Boolean | Belt slack |
+| `Otr_av` | GVL_OPC | Int16 | Advance motor torque (Nm) |
+| `Rfrd_av` | GVL_OPC | Int16 | Advance motor speed (rpm) |
+| `TempMoteur_av` | **GVL** | Float | Advance motor temperature (°C) |
+| `Lcr_av` | GVL_OPC | Float | Advance motor current (A) |
+| `Uop_av` | GVL_OPC | Int16 | Advance motor voltage (V) |
+| `Cpt_nb_piece` | GVL_OPC | Int16 | Piece count |
+| `Cpt_nb_bobine` | GVL_OPC | Int16 | Coil count |
+| `Nombre_tours` | GVL_OPC | Int16 | Current turn count |
+| `Dim_piece` | GVL_OPC | Int16 | Piece dimension |
+| `CourantA` | **GVL** | Float | Phase A current (A) |
+| `CourantB` | **GVL** | Float | Phase B current (A) |
+| `CourantC` | **GVL** | Float | Phase C current (A) |
+| `CourantTot` | GVL_OPC | Float | Total current A+B+C (A) |
+| `Ent_au` | GVL_OPC | Boolean | Emergency stop input |
+| `diActTorque` | GVL_ATV320_Accu | Int16 | Raw drive torque (verification) |
+| `diActlVelo` | GVL_ATV320_Accu | Int16 | Raw drive speed (verification) |
 
 ---
 
@@ -199,8 +227,6 @@ ob.summary()
 ---
 
 ## Known Issues & Notes
-
-**Otr_acc scale factor:** The OPC-UA server returns `Otr_acc` as `Int16`. The ontology thresholds (21.73, 23.85) assume real-unit values. If the machine returns scaled integers (e.g. 2173 instead of 21.73), set `SCALE_FACTOR = 0.01` in `update_ontology.py`. Confirm with first real machine data collection.
 
 **Pellet reasoner not used in pipeline:** `sync_reasoner_pellet` from owlready2 does not reliably return SWRL-inferred property values in Python — `motor.hasState` remains empty after reasoning despite Pellet executing successfully. The SWRL rules are therefore reimplemented natively in `update_ontology.py` as Python if/elif logic. The ontology is still loaded and data properties are updated on every cycle (making it a live data store), but inference happens in Python. This is a known owlready2 limitation documented in its issue tracker. The Python rules are semantically identical to the SWRL rules in the ontology.
 
