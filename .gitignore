@@ -39,7 +39,7 @@ Thumbs.db
 logs/
 
 # Data (if sensitive/large)
-# data/
+data/
 
 # MongoDB
 *.lock

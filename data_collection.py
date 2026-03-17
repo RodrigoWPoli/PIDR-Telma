@@ -21,29 +21,30 @@ from opcua import Client
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-OPC_SERVER_URL  = "opc.tcp://100.65.63.87:49152/OPCUAServerExpert"
+OPC_SERVER_URL  = "opc.tcp://100.65.63.65:4840"
 MONGO_URI       = "mongodb://localhost:27017/"
 DATABASE_NAME   = "telma"
 COLLECTION_NAME = "data"
 
-# Sampling interval in seconds
 SAMPLING_INTERVAL = 1.0
 
 # Variables to monitor — (name, node_id, type)
-# Only storing the 4 variables needed for ontology population + a few useful extras
+# Node IDs confirmed from PLC embedded server (GVL_OPC namespace)
 MONITORED_VARIABLES = [
-    # Core variables for failure detection
-    ("Otr_acc",       "ns=2;s=0:TELMA!Otr_acc",       "Int16"),   # Motor torque (WORD, %MW1)
-    ("Rfrd_acc",      "ns=2;s=0:TELMA!Rfrd_acc",       "Int16"),   # Motor speed rpm (WORD, %MW2)
-    ("Ent_bob_cour",  "ns=2;s=0:TELMA!Ent_bob_cour",   "Boolean"), # Coil current position (%MX101.4)
-    ("Ent_bob_abou",  "ns=2;s=0:TELMA!Ent_bob_abou",   "Boolean"), # Coil changing position (%MX101.5)
-    # Production state — helps distinguish normal stop from fault
-    ("En_Production", "ns=2;s=0:TELMA!En_Production",  "Boolean"), # Production cycle running (%MX102.6)
-    # Useful extras for diagnostics
-    ("TempMoteur_acc","ns=2;s=0:TELMA!TempMoteur_acc",  "Float"),   # Motor temperature (REAL, %MD500)
-    ("Lcr_acc",       "ns=2;s=0:TELMA!Lcr_acc",         "Float"),   # Motor current (REAL, %MD505)
-    ("Courroie_accu_tendue",   "ns=2;s=0:TELMA!Courroie_accu_tendue",   "Boolean"), # Belt tensioned (%MX101.1)
-    ("Courroie_accu_detendue", "ns=2;s=0:TELMA!Courroie_accu_detendue", "Boolean"), # Belt slack (%MX101.2)
+    # Core variables for fault detection
+    ("Otr_acc",       "ns=2;s=Application.GVL_OPC.Otr_acc",       "Int16"),
+    ("Rfrd_acc",      "ns=2;s=Application.GVL_OPC.Rfrd_acc",       "Int16"),
+    ("Ent_bob_cour",  "ns=2;s=Application.GVL_OPC.Ent_bob_cour",   "Boolean"),
+    ("Ent_bob_abou",  "ns=2;s=Application.GVL_OPC.Ent_bob_abou",   "Boolean"),
+    ("En_Production", "ns=2;s=Application.GVL_OPC.En_Production",  "Boolean"),
+    # Diagnostics
+    ("TempMoteur_acc","ns=2;s=Application.GVL_OPC.TempMoteur_acc", "Int16"),
+    ("Lcr_acc",       "ns=2;s=Application.GVL_OPC.Lcr_acc",        "Float"),
+    ("Courroie_accu_tendue",   "ns=2;s=Application.GVL_OPC.Courroie_accu_tendue",   "Boolean"),
+    ("Courroie_accu_detendue", "ns=2;s=Application.GVL_OPC.Courroie_accu_detendue", "Boolean"),
+    # Raw torque/speed from drive (for scale factor verification)
+    ("diActTorque",   "ns=2;s=Application.GVL_ATV320_Accu.diActTorque", "Int16"),
+    ("diActlVelo",    "ns=2;s=Application.GVL_ATV320_Accu.diActlVelo",  "Int16"),
 ]
 
 VARIABLE_NAMES = [v[0] for v in MONITORED_VARIABLES]

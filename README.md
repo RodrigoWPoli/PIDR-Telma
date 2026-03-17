@@ -202,7 +202,7 @@ ob.summary()
 
 **Otr_acc scale factor:** The OPC-UA server returns `Otr_acc` as `Int16`. The ontology thresholds (21.73, 23.85) assume real-unit values. If the machine returns scaled integers (e.g. 2173 instead of 21.73), set `SCALE_FACTOR = 0.01` in `update_ontology.py`. Confirm with first real machine data collection.
 
-**Pellet reasoner:** `sync_reasoner_pellet` from owlready2 does not reliably return inferred property values in Python. The SWRL rules are therefore reimplemented natively in `update_ontology.py`. The ontology is still loaded and data properties updated to maintain the semantic layer.
+**Pellet reasoner not used in pipeline:** `sync_reasoner_pellet` from owlready2 does not reliably return SWRL-inferred property values in Python — `motor.hasState` remains empty after reasoning despite Pellet executing successfully. The SWRL rules are therefore reimplemented natively in `update_ontology.py` as Python if/elif logic. The ontology is still loaded and data properties are updated on every cycle (making it a live data store), but inference happens in Python. This is a known owlready2 limitation documented in its issue tracker. The Python rules are semantically identical to the SWRL rules in the ontology.
 
 **MongoDB change streams:** The real-time monitor uses polling mode by default (`--polling` flag). Change streams require a MongoDB replica set, which is not configured in the local standalone setup.
 
