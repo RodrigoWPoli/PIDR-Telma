@@ -13,7 +13,6 @@ Requirements:
     - pip install opcua pymongo
 """
 
-import csv
 import time
 import pymongo
 from datetime import datetime, timezone
@@ -147,25 +146,24 @@ def store_in_mongodb(changed_data: dict) -> None:
 
 def collect(duration_seconds: int = None, csv_output: str = None) -> None:
     """
-    Main collection loop. Reads variables every SAMPLING_INTERVAL seconds,
-    stores changed values in MongoDB, and optionally writes to CSV.
+    Main collection loop. Reads variables every SAMPLING_INTERVAL seconds
+    and stores changed values in MongoDB.
 
     Args:
-        duration_seconds: how long to collect data. None = run until Ctrl+C.
-        csv_output:       optional path to CSV file for parallel storage
+        duration_seconds: how long to collect. None = run until Ctrl+C.
+        csv_output:       deprecated — ignored. Use the Data Explorer tab
+                          in the dashboard or MongoDB Compass to export data.
     """
+    if csv_output is not None:
+        import warnings
+        warnings.warn(
+            "csv_output is deprecated and ignored. Data is stored in MongoDB only. "
+            "Use the dashboard Data Explorer tab or MongoDB Compass to export CSV.",
+            DeprecationWarning, stacklevel=2
+        )
+
     print(f"Connecting to OPC-UA server: {OPC_SERVER_URL}")
     print("(Make sure AIPL VPN is connected)\n")
-
-    # Ensure output directory exists before anything else
-    if csv_output:
-        import os
-        csv_dir = os.path.dirname(csv_output)
-        if csv_dir:
-            os.makedirs(csv_dir, exist_ok=True)
-
-    csv_file   = None
-    csv_writer = None
 
     MAX_CONNECT_RETRIES = 5
     RETRY_DELAY         = 5
@@ -197,12 +195,6 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
 
     # ── Main loop ──────────────────────────────────────────────────────────────
     try:
-        if csv_output:
-            csv_file   = open(csv_output, "w", newline="")
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(["timestamp"] + VARIABLE_NAMES)
-            print(f"Writing CSV to: {csv_output}\n")
-
         previous_values = {}
         start_time      = time.time()
         end_time        = (start_time + duration_seconds) if duration_seconds else None
@@ -235,15 +227,6 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
             if changed:
                 store_in_mongodb(changed)
                 previous_values.update(changed)
-
-                if csv_writer:
-                    row = [datetime.now(timezone.utc).isoformat()]
-                    for name in VARIABLE_NAMES:
-                        val = current_values.get(name, {}).get("value", "")
-                        row.append(val)
-                    csv_writer.writerow(row)
-                    csv_file.flush()
-
                 changed_names = list(changed.keys())
                 print(f"  [{datetime.now().strftime('%H:%M:%S')}] Changed: {changed_names}")
 
@@ -263,8 +246,6 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
         raise
 
     finally:
-        if csv_file:
-            csv_file.close()
         try:
             opc_client.disconnect()
             print("  OPC-UA disconnected.")
@@ -275,12 +256,7 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
 # ── Entry point ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
     import sys
-    import os
 
     # Optional duration argument — if omitted, runs until Ctrl+C
     duration = int(sys.argv[1]) if len(sys.argv) > 1 else None
-
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    data_dir   = os.path.join(script_dir, "data")
-    csv_path   = os.path.join(data_dir, f"collection_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
-    collect(duration_seconds=duration, csv_output=csv_path)
+    collect(duration_seconds=duration)
