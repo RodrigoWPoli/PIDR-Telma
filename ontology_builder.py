@@ -29,6 +29,7 @@ Usage:
 """
 
 import os
+from pathlib import Path
 from owlready2 import (
     World, Thing, ObjectProperty, DataProperty,
     types
@@ -63,7 +64,7 @@ class OntologyBuilder:
             raise FileNotFoundError(f"Ontology not found: {path}")
 
         self._world = World()
-        self._onto  = self._world.get_ontology(f"file://{path}").load()
+        self._onto  = self._world.get_ontology(Path(path).as_uri()).load()
         self._log   = []   # change log for summary()
 
         print(f"✓ Loaded ontology: {path}")

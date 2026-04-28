@@ -20,6 +20,7 @@ import os
 import argparse
 import pymongo
 from datetime import datetime, timezone
+from pathlib import Path
 from owlready2 import get_ontology, World
 
 from swrl_engine import SWRLEngine
@@ -28,7 +29,7 @@ from swrl_engine import SWRLEngine
 # ── Configuration ──────────────────────────────────────────────────────────────
 SCRIPT_DIR     = os.path.dirname(os.path.abspath(__file__))
 ONTOLOGY_PATH  = os.path.abspath(os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014.owl"))
-ONTOLOGY_URL   = f"file://{ONTOLOGY_PATH}"
+ONTOLOGY_URL   = Path(ONTOLOGY_PATH).as_uri()
 
 MONGO_URI       = "mongodb://localhost:27017/"
 DATABASE_NAME   = "telma"
