@@ -8,6 +8,7 @@ Usage:
 """
 
 import sys
+from pathlib import Path
 
 print("=" * 55)
 print("TELMA Project — Connection & Environment Test")
@@ -81,7 +82,7 @@ try:
         import os
         _onto_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ontology", "KARMA_v014.owl")
         onto = owlready2.get_ontology(
-            f"file://{_onto_path}"
+            Path(_onto_path).as_uri()
         ).load()
         classes = list(onto.classes())
         individuals = list(onto.individuals())
