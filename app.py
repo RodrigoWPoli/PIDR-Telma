@@ -69,19 +69,30 @@ def main():
 
     print("Dashboard ready — opening window.")
 
-    def on_closed():
-        process.terminate()
+    try:
+        def on_closed():
+            process.terminate()
 
-    window = webview.create_window(
-        title   = "TELMA Fault Detection Dashboard",
-        url     = url,
-        width   = WINDOW_W,
-        height  = WINDOW_H,
-        resizable = True,
-    )
-    window.events.closed += on_closed
-
-    webview.start()
+        window = webview.create_window(
+            title     = "TELMA Fault Detection Dashboard",
+            url       = url,
+            width     = WINDOW_W,
+            height    = WINDOW_H,
+            resizable = True,
+        )
+        window.events.closed += on_closed
+        webview.start()
+    except Exception:
+        # No GUI backend available (e.g. missing GTK on Linux).
+        # Fall back to opening the default browser and keeping the server alive.
+        import webbrowser
+        print("Native window unavailable — opening browser instead.")
+        print(f"Dashboard: {url}  (press Ctrl+C to stop)")
+        webbrowser.open(url)
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            process.terminate()
 
 
 if __name__ == "__main__":
