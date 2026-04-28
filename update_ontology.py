@@ -1,12 +1,12 @@
 """
 update_ontology.py
 Reads the latest sensor values from MongoDB, updates the KARMA ontology
-data properties, evaluates the SWRL rules in Python, and returns the
-inferred health state.
+data properties, evaluates the SWRL rules via the SWRLEngine, and returns
+the inferred health state.
 
-The SWRL rules are reimplemented directly in Python because owlready2's
-Pellet integration does not reliably pull inferred property values back
-into the Python object model. The logic is identical to the ontology rules.
+Rules are read directly from the OWL file at startup. When the researcher
+modifies rules in Protégé and saves the file, restart this script (or the
+monitor) to pick up the changes — no Python edits required.
 
 Based on Julie Galopeau's internship report (2023).
 Rebuilt for the 2025-2026 PIDR project.
@@ -21,6 +21,8 @@ import argparse
 import pymongo
 from datetime import datetime, timezone
 from owlready2 import get_ontology, World
+
+from swrl_engine import SWRLEngine
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
@@ -37,8 +39,8 @@ INDIVIDUAL_ENT_BOB_COUR = "Ent_bob_cour"
 INDIVIDUAL_ENT_BOB_ABOU = "Ent_bob_abou"
 INDIVIDUAL_MOTOR        = "AccumulatorMotor"
 
-ALERT_THRESHOLD = 21.73
-ALARM_THRESHOLD = 23.85
+# Initialise the engine once — rules are parsed from the OWL file here.
+_engine = SWRLEngine(ONTOLOGY_PATH)
 
 
 # ── MongoDB ────────────────────────────────────────────────────────────────────
@@ -65,7 +67,7 @@ def get_latest_values() -> dict:
         # Drive verification
         "diActTorque", "diActlVelo",
     ]
-    latest    = {}
+    latest = {}
     for var in variables:
         doc = collection.find_one(
             {var: {"$exists": True}},
@@ -113,93 +115,46 @@ def update_data_properties(onto, values: dict, verbose: bool = False) -> None:
                     print(f"  Set Ent_bob_abou.hasVerticalPosition = {bool(values['Ent_bob_abou'])}")
 
 
-# ── Python-native SWRL rule evaluation ────────────────────────────────────────
-def evaluate_coil_changing(horizontal: bool, vertical: bool) -> bool:
-    """
-    Rules S2/S3/S4/S5: infer whether the coil is currently changing.
-    S2: horizontal=False AND vertical=True  → isChanging = True
-    S3: horizontal=True  AND vertical=True  → isChanging = False
-    S4: horizontal=True  AND vertical=False → isChanging = False
-    S5: horizontal=False AND vertical=False → isChanging = False
-    """
-    return (not horizontal) and vertical
-
-
-def evaluate_health_state(otr_value: float,
-                           is_coil_changing: bool,
-                           in_production: bool = True,
-                           verbose: bool = False) -> str:
-    """
-    Rules S6/S7/S8/S9/S10: infer the health state of the AccumulatorMotor.
-    Returns one of: "Healthy", "Alert", "Alarm", "Faulty", "Stopped"
-
-    S9:  otr = 0 AND coil IS changing          → Healthy (coil change, not a fault)
-    S10: otr = 0 AND coil NOT changing
-            AND in production                  → Faulty
-            AND NOT in production              → Stopped (normal, not a fault)
-    S6:  0 < otr <= ALERT_THRESHOLD            → Healthy
-    S7:  ALERT_THRESHOLD < otr <= ALARM        → Alert
-    S8:  otr > ALARM_THRESHOLD                 → Alarm
-    """
-    if otr_value == 0:
-        if is_coil_changing:
-            if verbose: print(f"  Rule S9: Otr=0 + coil changing → Healthy")
-            return "Healthy"
-        elif not in_production:
-            if verbose: print(f"  Rule S10 (modified): Otr=0 + not in production → Stopped")
-            return "Stopped"
-        else:
-            if verbose: print(f"  Rule S10: Otr=0 + coil NOT changing + in production → Faulty")
-            return "Faulty"
-    elif 0 < otr_value <= ALERT_THRESHOLD:
-        if verbose: print(f"  Rule S6: 0 < {otr_value} <= {ALERT_THRESHOLD} → Healthy")
-        return "Healthy"
-    elif ALERT_THRESHOLD < otr_value <= ALARM_THRESHOLD:
-        if verbose: print(f"  Rule S7: {otr_value} in alert range → Alert")
-        return "Alert"
-    else:
-        if verbose: print(f"  Rule S8: {otr_value} > {ALARM_THRESHOLD} → Alarm")
-        return "Alarm"
-
-
-def evaluate_deviations(state: str) -> dict:
-    """Rules S1/S11: infer flow deviations when Alert or Alarm."""
-    if state in ("Alert", "Alarm"):
-        return {
-            "RotationalSpeedFlow": "LessAccumulatorMotorShaftRotationalSpeed",
-            "TorqueFlow":          "MoreAccumulatorMotorTorque",
-        }
-    return {}
-
-
-def evaluate_failure_state(state: str) -> list:
-    """Rule S10 head: Faulty → hasFailureState BearingNotWorking."""
-    return ["BearingNotWorking"] if state == "Faulty" else []
-
-
-def evaluate_functions(state: str) -> list:
-    """Rule S6 head: Healthy → hasFunction motor function."""
-    return ["AccumulatorMotorProvidesAdequateMechanicalRotationForBandAccumulation"] \
-        if state == "Healthy" else []
-
-
+# ── Inference ──────────────────────────────────────────────────────────────────
 def infer_state(values: dict, verbose: bool = False) -> dict:
-    """Runs all Python-native SWRL rules and returns the full inference result."""
+    """
+    Loads the ontology, sets sensor values, runs all SWRL rules via
+    SWRLEngine, and returns the full inference result dict.
+
+    The engine reads rules from the OWL file, so any change the researcher
+    makes in Protégé is automatically reflected after a restart.
+    """
     otr_value     = float(values.get("Otr_acc", 0))
     horizontal    = bool(values.get("Ent_bob_cour", False))
     vertical      = bool(values.get("Ent_bob_abou", False))
-    in_production = bool(values.get("En_Production", True))  # assume in production if unknown
+    in_production = bool(values.get("En_Production", True))
 
-    is_coil_changing = evaluate_coil_changing(horizontal, vertical)
+    onto, _ = load_ontology()
+    update_data_properties(onto, values, verbose=verbose)
+
+    inferred = _engine.evaluate(onto)
+
+    motor       = inferred.get(INDIVIDUAL_MOTOR, {})
+    state_set   = motor.get("hasState", set())
+    state       = next(iter(state_set)) if state_set else None
+
+    # Collect deviations: {flow_name: deviation_name}
+    deviations = {}
+    for ind, props in inferred.items():
+        devs = props.get("hasDeviation", set())
+        if devs:
+            deviations[ind] = next(iter(devs))
+
+    failure_states = list(motor.get("hasFailureState", set()))
+    functions      = list(motor.get("hasFunction", set()))
+
+    is_coil_changing = vertical and not horizontal
+
     if verbose:
         print(f"  Coil isChanging = {is_coil_changing} "
               f"(horizontal={horizontal}, vertical={vertical})")
         print(f"  En_Production   = {in_production}")
-
-    state          = evaluate_health_state(otr_value, is_coil_changing, in_production, verbose)
-    deviations     = evaluate_deviations(state)
-    failure_states = evaluate_failure_state(state)
-    functions      = evaluate_functions(state)
+        print(f"  SWRL inferred   : {inferred}")
 
     return {
         "component":        INDIVIDUAL_MOTOR,
@@ -225,7 +180,7 @@ def run_pipeline(verbose: bool = False) -> dict:
     Full pipeline:
       1. Read latest values from MongoDB
       2. Load ontology and update data properties
-      3. Evaluate SWRL rules in Python
+      3. Evaluate SWRL rules via SWRLEngine
       4. Return inference result
     """
     print("\n── Step 1: Reading latest values from MongoDB ───────────")
@@ -242,8 +197,8 @@ def run_pipeline(verbose: bool = False) -> dict:
           f"{len(list(onto.individuals()))} individuals")
     update_data_properties(onto, values, verbose=True)
 
-    print("\n── Step 3: Evaluating rules (Python-native) ─────────────")
-    result = infer_state(values, verbose=True)
+    print(f"\n── Step 3: Evaluating SWRL rules ({len(_engine.rules)} rules) ──")
+    result = infer_state(values, verbose=verbose)
 
     print("\n── Result ───────────────────────────────────────────────")
     print(f"  Component   : {result['component']}")
