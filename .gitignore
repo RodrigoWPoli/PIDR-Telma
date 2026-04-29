@@ -6,7 +6,10 @@ __pycache__/
 *.egg
 *.egg-info/
 dist/
-build/
+build/*.exe
+build/Output/
+build/venv/
+build/mongodb/
 .eggs/
 
 # Virtual environments
