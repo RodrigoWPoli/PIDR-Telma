@@ -12,6 +12,8 @@ import glob
 import os
 import socket
 import subprocess
+import sys
+import threading
 import time
 import pandas as pd
 import pymongo
@@ -20,6 +22,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from dateutil import parser as dateutil_parser
 from update_ontology import infer_state, load_ontology, update_data_properties
+from owlready2 import sync_reasoner_pellet, World
 
 
 # ── VPN check ─────────────────────────────────────────────────────────────────
@@ -33,7 +36,15 @@ def check_vpn() -> tuple[bool, str]:
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-SCRIPT_DIR        = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, "frozen", False):
+    SCRIPT_DIR = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+    _user_data = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
+    USER_DATA_DIR = os.path.join(_user_data, "PIDR")
+    os.makedirs(os.path.join(USER_DATA_DIR, "ontology"), exist_ok=True)
+    os.makedirs(os.path.join(USER_DATA_DIR, "data"), exist_ok=True)
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    USER_DATA_DIR = SCRIPT_DIR
 MONGO_URI         = "mongodb://localhost:27017/"
 DATABASE_NAME     = "telma"
 COLLECTION_NAME   = "data"
@@ -42,7 +53,23 @@ HISTORY_POINTS    = 60
 MAX_STATE_HISTORY = 20
 ALERT_THRESHOLD   = 21.73
 ALARM_THRESHOLD   = 23.85
-LIVE_ONTOLOGY_PATH = os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014_live.owl")
+LIVE_ONTOLOGY_PATH = os.path.join(USER_DATA_DIR, "ontology", "KARMA_v014_live.owl")
+
+_pellet_running = False
+
+
+def _pellet_thread(live_path):
+    global _pellet_running
+    try:
+        world = World()
+        onto = world.get_ontology(f"file://{live_path}").load()
+        sync_reasoner_pellet(world=world, infer_property_values=True,
+                             infer_data_property_values=True)
+        onto.save(file=live_path, format="rdfxml")
+    except Exception:
+        pass
+    finally:
+        _pellet_running = False
 
 STATE_CONFIG = {
     "Healthy": {"color": "#1D9E75", "bg": "#E1F5EE"},
@@ -159,7 +186,7 @@ REPLAY_WATCHED = [
     "Cpt_nb_piece", "Cpt_nb_bobine", "Nombre_tours", "Dim_piece",
     "CourantA", "CourantB", "CourantC", "CourantTot", "Ent_au", "diActTorque", "diActlVelo",
 ]
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+DATA_DIR = os.path.join(USER_DATA_DIR, "data")
 
 
 def list_csv_files() -> list[str]:
@@ -241,6 +268,8 @@ if "auto_update_ontology" not in st.session_state:
     st.session_state.auto_update_ontology = True
 if "monitor_active" not in st.session_state:
     st.session_state.monitor_active = True
+if "pellet_reasoner_active" not in st.session_state:
+    st.session_state.pellet_reasoner_active = False
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -281,11 +310,14 @@ with st.sidebar:
 
         if st.button("Start collection", use_container_width=True,
                      type="primary", disabled=not vpn_ok):
-            import sys
-            script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  "data_collection.py")
+            if getattr(sys, "frozen", False):
+                cmd = [sys.executable, "--data-collection"]
+            else:
+                script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "data_collection.py")
+                cmd = [sys.executable, script]
             p = subprocess.Popen(
-                [sys.executable, script],
+                cmd,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL
             )
@@ -307,6 +339,8 @@ with st.sidebar:
         st.markdown("**Ontology**")
         st.toggle("Auto-update ontology", key="auto_update_ontology",
                   help="Keep OWL individuals in sync with latest MongoDB data")
+        st.toggle("Run Pellet reasoner on update", key="pellet_reasoner_active",
+                  help="Launch Pellet after each ontology update (heavier, ~1-3s)")
         if st.button("Save ontology snapshot", use_container_width=True):
             onto = get_ontology()
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -377,12 +411,22 @@ with tab_monitor:
             try:
                 update_data_properties(onto, values)
                 onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                if st.session_state.pellet_reasoner_active and not _pellet_running:
+                    _pellet_running = True
+                    threading.Thread(target=_pellet_thread,
+                                     args=(LIVE_ONTOLOGY_PATH,),
+                                     daemon=True).start()
             except Exception:
                 st.cache_resource.clear()
                 onto = get_ontology()
                 try:
                     update_data_properties(onto, values)
                     onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                    if st.session_state.pellet_reasoner_active and not _pellet_running:
+                        _pellet_running = True
+                        threading.Thread(target=_pellet_thread,
+                                         args=(LIVE_ONTOLOGY_PATH,),
+                                         daemon=True).start()
                 except Exception:
                     pass
 
@@ -606,22 +650,38 @@ with tab_data:
     st.markdown("<hr style='border:none;border-top:0.5px solid #e5e5e5;margin:0.5rem 0;'>",
                 unsafe_allow_html=True)
 
-    fc1, fc2, fc3 = st.columns([1, 1, 2])
+    fc1, fc2, fc3, fc4 = st.columns([1, 1, 1, 2])
     with fc1:
-        n_rows = st.selectbox("Show last N readings", [50, 100, 250, 500, 1000], index=1)
+        view_mode = st.radio("Show", ["All", "Last N"], horizontal=True, index=0,
+                             key="data_view_mode")
     with fc2:
+        if view_mode == "Last N":
+            n_rows = st.selectbox("Rows", [50, 100, 250, 500, 1000], index=1,
+                                  key="data_n_rows")
+        else:
+            n_rows = None
+    with fc3:
+        sort_order = st.radio("Sort", ["Newest first", "Oldest first"],
+                              horizontal=True, index=0, key="data_sort_order")
+    with fc4:
         var_filter = st.selectbox("Filter by variable", ["All"] + [
             "Otr_acc", "Rfrd_acc", "TempMoteur_acc", "Lcr_acc",
             "Otr_av", "Rfrd_av", "CourantA", "CourantB", "CourantC", "CourantTot",
             "En_Production", "Ent_bob_cour", "Ent_bob_abou",
-        ])
-    with fc3:
+        ], key="data_var_filter")
+    _, _, fc_state = st.columns([2, 2, 1])
+    with fc_state:
         search_state = st.selectbox("Filter by inferred state",
-                                    ["All", "Healthy", "Alert", "Alarm", "Faulty", "Stopped"])
+                                    ["All", "Healthy", "Alert", "Alarm", "Faulty", "Stopped"],
+                                    key="data_search_state")
 
     query = {} if var_filter == "All" else {var_filter: {"$exists": True}}
-    docs  = list(col.find(query, sort=[("Otr_acc.SourceTimestamp", -1)]).limit(n_rows))
-    docs.reverse()
+    cursor = col.find(query, sort=[("Otr_acc.SourceTimestamp", -1)])
+    if n_rows is not None:
+        cursor = cursor.limit(n_rows)
+    docs = list(cursor)
+    if sort_order == "Oldest first":
+        docs.reverse()
 
     VARIABLE_NAMES = [
         "Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production",

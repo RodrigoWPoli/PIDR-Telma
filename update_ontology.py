@@ -17,6 +17,7 @@ Usage:
 """
 
 import os
+import sys
 import argparse
 import pymongo
 from datetime import datetime, timezone
@@ -24,7 +25,10 @@ from owlready2 import get_ontology, World
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
-SCRIPT_DIR     = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, "frozen", False):
+    SCRIPT_DIR = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ONTOLOGY_PATH  = os.path.abspath(os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014.owl"))
 ONTOLOGY_URL   = f"file://{ONTOLOGY_PATH}"
 
