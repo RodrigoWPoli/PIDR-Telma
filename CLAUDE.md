@@ -30,9 +30,26 @@ python3 realtime_monitor.py --polling     # start monitor in polling mode (requi
 python3 data_collection.py 300            # collect for 5 minutes from OPC-UA server
 ```
 
+### Replay collected data through the reasoner
+```bash
+# replay a CSV at real speed (respects original timestamps)
+python3 replay_data.py data/collection_20260317_112955.csv
+
+# replay at 10x speed
+python3 replay_data.py data/collection_20260317_112955.csv --speed 10
+
+# fixed 0.5s between rows, only show state changes
+python3 replay_data.py data/collection_20260317_112955.csv --interval 0.5 --quiet
+
+# replay as fast as possible with verbose rule output
+python3 replay_data.py data/collection_20260317_112955.csv --interval 0 --verbose
+
+# replay from MongoDB (all stored documents in insertion order)
+python3 replay_data.py --mongo --interval 1
+```
+
 ### Tests
 ```bash
-python3 test_ontology_builder.py          # tests OntologyBuilder API (self-cleaning, no pytest needed)
 python3 test_connections.py               # environment / connectivity checks
 ```
 
@@ -60,8 +77,6 @@ OPC-UA server ──► data_collection.py ──► MongoDB (telma.data)
 4. Returns a result dict with `state`, `deviations`, `failure_states`, `functions`
 
 **`realtime_monitor.py`** imports `infer_state`, `load_ontology`, `update_data_properties` from `update_ontology.py`. It loads the ontology once, then watches MongoDB for new inserts and runs inference on each document, merging partial updates with the previously known full state.
-
-**`ontology_builder.py`** provides an API (`OntologyBuilder`) for programmatically extending the KARMA ontology — adding components, sensors, variables, failure causes, failure modes, and deviations — without editing the OWL file. The ontology is never modified in-place; `save()` writes a new file.
 
 ## Key Configuration
 

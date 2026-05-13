@@ -36,8 +36,7 @@ The monitored component is the **AccumulatorMotor**. The key indicator is `Otr_a
 ├── update_ontology.py          # Loads ontology, evaluates rules, returns health state
 ├── realtime_monitor.py         # Watches MongoDB → runs inference on each new doc
 ├── dashboard.py                # Streamlit real-time dashboard
-├── ontology_builder.py         # API for dynamically extending the ontology
-├── test_ontology_builder.py    # Tests for ontology_builder.py
+
 ├── test_connections.py         # Environment / connectivity check
 │
 ├── requirements.txt
@@ -197,33 +196,6 @@ Connection: `mongodb://localhost:27017/` — database `telma`, collection `data`
 
 ---
 
-## Extending the Ontology
-
-Use `ontology_builder.py` to add new components, failure chains, or sensors without editing the OWL file in Protégé:
-
-```python
-from ontology_builder import OntologyBuilder
-
-ob = OntologyBuilder("ontology/KARMA_v014.owl")
-
-# Add a new failure scenario
-ob.add_failure_chain(
-    cause_name            = "BeltWearByFriction",
-    cause_class           = "PrimaryFailureCause",
-    mode_name             = "BeltDeterioration",
-    mode_class            = "MechanicalFailureMode",
-    occurs_in             = "AccumulatorMotor",
-    results_in_deviations = ["LessBeltTension", "MoreAdvanceMotorTorque"],
-    deviation_classes     = ["Negative", "Positive"]
-)
-
-ob.add_sensor("SQ30", installed_on="AccumulatorMotor",
-              measures_variable="Otr_av")
-
-ob.save("ontology/KARMA_v014_updated.owl")
-ob.summary()
-```
-
 ---
 
 ## Known Issues & Notes
@@ -242,9 +214,9 @@ ob.summary()
 |-------|--------|-------------|
 | 1 — Audit & Setup | ✅ Done | Environment, connections, end-to-end pipeline |
 | 2 — Real-time loop | ✅ Done | MongoDB polling monitor with state transitions |
-| 3 — Dynamic ontology | ✅ Done | `ontology_builder.py` API |
+
 | 4 — Interface | ✅ Done | Streamlit dashboard |
-| 5 — New failure scenario | ⏳ Stretch | Second failure scenario using Phase 3 API |
+
 
 ---
 
