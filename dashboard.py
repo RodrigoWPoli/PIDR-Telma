@@ -12,6 +12,7 @@ import glob
 import os
 import socket
 import subprocess
+import threading
 import time
 import pandas as pd
 import pymongo
@@ -20,6 +21,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 from dateutil import parser as dateutil_parser
 from update_ontology import infer_state, load_ontology, update_data_properties
+from owlready2 import sync_reasoner_pellet, World
 
 
 # ── VPN check ─────────────────────────────────────────────────────────────────
@@ -43,6 +45,22 @@ MAX_STATE_HISTORY = 20
 ALERT_THRESHOLD   = 21.73
 ALARM_THRESHOLD   = 23.85
 LIVE_ONTOLOGY_PATH = os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014_live.owl")
+
+_pellet_running = False
+
+
+def _pellet_thread(live_path):
+    global _pellet_running
+    try:
+        world = World()
+        onto = world.get_ontology(f"file://{live_path}").load()
+        sync_reasoner_pellet(world=world, infer_property_values=True,
+                             infer_data_property_values=True)
+        onto.save(file=live_path, format="rdfxml")
+    except Exception:
+        pass
+    finally:
+        _pellet_running = False
 
 STATE_CONFIG = {
     "Healthy": {"color": "#1D9E75", "bg": "#E1F5EE"},
@@ -241,6 +259,8 @@ if "auto_update_ontology" not in st.session_state:
     st.session_state.auto_update_ontology = True
 if "monitor_active" not in st.session_state:
     st.session_state.monitor_active = True
+if "pellet_reasoner_active" not in st.session_state:
+    st.session_state.pellet_reasoner_active = False
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -307,6 +327,8 @@ with st.sidebar:
         st.markdown("**Ontology**")
         st.toggle("Auto-update ontology", key="auto_update_ontology",
                   help="Keep OWL individuals in sync with latest MongoDB data")
+        st.toggle("Run Pellet reasoner on update", key="pellet_reasoner_active",
+                  help="Launch Pellet after each ontology update (heavier, ~1-3s)")
         if st.button("Save ontology snapshot", use_container_width=True):
             onto = get_ontology()
             ts = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -377,12 +399,22 @@ with tab_monitor:
             try:
                 update_data_properties(onto, values)
                 onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                if st.session_state.pellet_reasoner_active and not _pellet_running:
+                    _pellet_running = True
+                    threading.Thread(target=_pellet_thread,
+                                     args=(LIVE_ONTOLOGY_PATH,),
+                                     daemon=True).start()
             except Exception:
                 st.cache_resource.clear()
                 onto = get_ontology()
                 try:
                     update_data_properties(onto, values)
                     onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                    if st.session_state.pellet_reasoner_active and not _pellet_running:
+                        _pellet_running = True
+                        threading.Thread(target=_pellet_thread,
+                                         args=(LIVE_ONTOLOGY_PATH,),
+                                         daemon=True).start()
                 except Exception:
                     pass
 
