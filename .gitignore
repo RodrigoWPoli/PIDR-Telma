@@ -47,3 +47,7 @@ data/
 # SELinux policy build artifacts
 *.pp
 tmp/
+
+# Ontology live/snapshot files
+ontology/KARMA_v014_live.owl
+ontology/KARMA_v014_snapshot_*.owl

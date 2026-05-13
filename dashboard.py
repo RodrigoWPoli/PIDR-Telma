@@ -33,6 +33,7 @@ def check_vpn() -> tuple[bool, str]:
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
+SCRIPT_DIR        = os.path.dirname(os.path.abspath(__file__))
 MONGO_URI         = "mongodb://localhost:27017/"
 DATABASE_NAME     = "telma"
 COLLECTION_NAME   = "data"
@@ -41,6 +42,7 @@ HISTORY_POINTS    = 60
 MAX_STATE_HISTORY = 20
 ALERT_THRESHOLD   = 21.73
 ALARM_THRESHOLD   = 23.85
+LIVE_ONTOLOGY_PATH = os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014_live.owl")
 
 STATE_CONFIG = {
     "Healthy": {"color": "#1D9E75", "bg": "#E1F5EE"},
@@ -305,6 +307,14 @@ with st.sidebar:
         st.markdown("**Ontology**")
         st.toggle("Auto-update ontology", key="auto_update_ontology",
                   help="Keep OWL individuals in sync with latest MongoDB data")
+        if st.button("Save ontology snapshot", use_container_width=True):
+            onto = get_ontology()
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            path = os.path.join(SCRIPT_DIR, "ontology", f"KARMA_v014_snapshot_{ts}.owl")
+            onto.save(file=path, format="rdfxml")
+            st.toast(f"Snapshot saved: {os.path.basename(path)}")
+            st.session_state.ontology_log.insert(
+                0, f"{datetime.now().strftime('%H:%M:%S')} — snapshot saved")
 
     if st.session_state.ontology_log:
         for entry in st.session_state.ontology_log[:4]:
@@ -366,11 +376,13 @@ with tab_monitor:
             onto = get_ontology()
             try:
                 update_data_properties(onto, values)
+                onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
             except Exception:
                 st.cache_resource.clear()
                 onto = get_ontology()
                 try:
                     update_data_properties(onto, values)
+                    onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
                 except Exception:
                     pass
 
