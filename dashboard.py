@@ -237,6 +237,8 @@ if "replay_onto" not in st.session_state:
     st.session_state.replay_onto = None
 if "auto_update_ontology" not in st.session_state:
     st.session_state.auto_update_ontology = True
+if "monitor_active" not in st.session_state:
+    st.session_state.monitor_active = True
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -296,10 +298,13 @@ with st.sidebar:
 
     st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
 
-    st.markdown("**Ontology**")
-    auto_update = st.toggle("Auto-update ontology", value=st.session_state.auto_update_ontology,
-                            help="Keep OWL individuals in sync with latest MongoDB data")
-    st.session_state.auto_update_ontology = auto_update
+    st.markdown("**Monitor**")
+    st.toggle("Monitor active", key="monitor_active")
+
+    if st.session_state.monitor_active:
+        st.markdown("**Ontology**")
+        st.toggle("Auto-update ontology", key="auto_update_ontology",
+                  help="Keep OWL individuals in sync with latest MongoDB data")
 
     if st.session_state.ontology_log:
         for entry in st.session_state.ontology_log[:4]:
@@ -346,6 +351,12 @@ with tab_monitor:
 
     @st.fragment(run_every=REFRESH_INTERVAL)
     def monitor_tab():
+        if not st.session_state.monitor_active:
+            st.markdown("<div style='text-align:center;color:#888;padding:3rem 0;'>"
+                        "Monitor is deactivated. Use the sidebar toggle to activate.</div>",
+                        unsafe_allow_html=True)
+            return
+
         values = get_latest_values()
         if not values:
             st.warning("No data in MongoDB. Run simulate_data.py or data_collection.py first.")
