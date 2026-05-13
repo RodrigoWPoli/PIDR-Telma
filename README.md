@@ -14,7 +14,7 @@ This project detects bearing deterioration faults in the TELMA unwinding press b
 1. Reading sensor data from the OPC-UA server in real time
 2. Storing values in MongoDB
 3. Evaluating SWRL-based inference rules (implemented in Python) against the KARMA ontology
-4. Outputting the inferred health state: **Healthy / Alert / Alarm / Faulty**
+4. Outputting the inferred health state: **Healthy / Alert / Alarm / Faulty / Stopped**
 
 The monitored component is the **AccumulatorMotor**. The key indicator is `Otr_acc` (motor torque) — as bearing wear increases, torque rises above the alert and alarm thresholds.
 
@@ -105,7 +105,38 @@ pip install streamlit plotly   # first time only
 streamlit run dashboard.py     # opens http://localhost:8501
 ```
 
-The dashboard auto-refreshes every 2 seconds and shows the current health state, torque chart, failure chain, signal status, and state history.
+The dashboard has three tabs:
+
+| Tab | Purpose |
+|-----|---------|
+| **Monitor** | Real-time health state, Otr_acc chart (hysteresis-colored), failure chain, signal status, state history, advance motor metrics, production counters, electrical data. Refreshes every 1–10 s (configurable). |
+| **Data explorer** | Flat table of all MongoDB documents with inferred states, filters by variable/state, CSV export. |
+| **Replay** | Replay CSV files or MongoDB documents through the reasoner — configurable interval, state distribution chart, Start/Stop controls. |
+
+**Sidebar controls:**
+- **VPN status** — shows whether the PLC is reachable
+- **Data collection** — start/stop `data_collection.py` as a subprocess (VPN required for real data)
+- **Monitor active** toggle — deactivate to run standalone data collection without inference overhead (Monitor tab shows a placeholder)
+- **Auto-update ontology** toggle — writes current data property values to `ontology/KARMA_v014_live.owl` on each refresh
+- **Run Pellet reasoner** toggle — launches Pellet in a background thread after each ontology update, materializing inferred axioms into the live file (~1–3 s, does not block UI)
+- **Save ontology snapshot** button — writes a timestamped `ontology/KARMA_v014_snapshot_YYYYMMDD_HHMMSS.owl` for session history
+- **Refresh interval** slider — 1–10 s
+- **Clear state history** — resets the state transition log
+
+---
+
+## Ontology Live File & Protégé
+
+When **Auto-update ontology** is enabled in the dashboard, the live ontology state is saved to `ontology/KARMA_v014_live.owl` on each refresh. This file contains the current data property values (`hasCurrentValue`, `hasHorizontalPosition`, `hasVerticalPosition`) set on the ontology individuals.
+
+If **Run Pellet reasoner** is also enabled, Pellet runs in a background thread on the live file after each update, materializing all inferred axioms (classifications, property assertions, SWRL rule results) into the same file.
+
+**Inspecting in Protégé:**
+- Open `ontology/KARMA_v014_live.owl` in Protégé to see the current live values
+- Run `Reasoner > Pellet` to re-run the reasoner interactively
+- Use `ontology/KARMA_v014_snapshot_*.owl` files to inspect a past session state
+
+The original `ontology/KARMA_v014.owl` is **never modified** by the dashboard — only the live and snapshot files are written.
 
 ---
 
@@ -196,11 +227,9 @@ Connection: `mongodb://localhost:27017/` — database `telma`, collection `data`
 
 ---
 
----
-
 ## Known Issues & Notes
 
-**Pellet reasoner not used in pipeline:** `sync_reasoner_pellet` from owlready2 does not reliably return SWRL-inferred property values in Python — `motor.hasState` remains empty after reasoning despite Pellet executing successfully. The SWRL rules are therefore reimplemented natively in `update_ontology.py` as Python if/elif logic. The ontology is still loaded and data properties are updated on every cycle (making it a live data store), but inference happens in Python. This is a known owlready2 limitation documented in its issue tracker. The Python rules are semantically identical to the SWRL rules in the ontology.
+**Pellet reasoner:** `sync_reasoner_pellet` from owlready2 does not reliably return SWRL-inferred property values in Python — `motor.hasState` remains empty after reasoning despite Pellet executing successfully. The SWRL rules are therefore reimplemented natively in `update_ontology.py` as Python if/elif logic. Pellet is optionally used in the dashboard (toggle in sidebar) to reason the live ontology file in a background thread; results are saved to disk for inspection in Protégé.
 
 **MongoDB change streams:** The real-time monitor uses polling mode by default (`--polling` flag). Change streams require a MongoDB replica set, which is not configured in the local standalone setup.
 
@@ -214,9 +243,7 @@ Connection: `mongodb://localhost:27017/` — database `telma`, collection `data`
 |-------|--------|-------------|
 | 1 — Audit & Setup | ✅ Done | Environment, connections, end-to-end pipeline |
 | 2 — Real-time loop | ✅ Done | MongoDB polling monitor with state transitions |
-
-| 4 — Interface | ✅ Done | Streamlit dashboard |
-
+| 4 — Interface | ✅ Done | Streamlit dashboard with live ontology and Pellet reasoning |
 
 ---
 

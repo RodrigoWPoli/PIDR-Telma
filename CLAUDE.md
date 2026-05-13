@@ -30,24 +30,6 @@ python3 realtime_monitor.py --polling     # start monitor in polling mode (requi
 python3 data_collection.py 300            # collect for 5 minutes from OPC-UA server
 ```
 
-### Replay collected data through the reasoner
-```bash
-# replay a CSV at real speed (respects original timestamps)
-python3 replay_data.py data/collection_20260317_112955.csv
-
-# replay at 10x speed
-python3 replay_data.py data/collection_20260317_112955.csv --speed 10
-
-# fixed 0.5s between rows, only show state changes
-python3 replay_data.py data/collection_20260317_112955.csv --interval 0.5 --quiet
-
-# replay as fast as possible with verbose rule output
-python3 replay_data.py data/collection_20260317_112955.csv --interval 0 --verbose
-
-# replay from MongoDB (all stored documents in insertion order)
-python3 replay_data.py --mongo --interval 1
-```
-
 ### Tests
 ```bash
 python3 test_connections.py               # environment / connectivity checks
@@ -103,7 +85,7 @@ The monitor merges partial documents with the last known complete state before r
 
 ## Known Issues
 
-- **Pellet reasoner**: `sync_reasoner_pellet` does not reliably return inferred property values via owlready2. SWRL rules S2–S10 are reimplemented natively in `update_ontology.py`. The ontology is still loaded and updated to maintain the semantic layer.
+- **Pellet reasoner**: `sync_reasoner_pellet` does not reliably return inferred property values via owlready2. SWRL rules S2–S10 are reimplemented natively in `update_ontology.py`. The ontology is still loaded and updated to maintain the semantic layer. Pellet is optionally launched from the dashboard (toggle in sidebar) in a background thread to reason the live ontology file; results are saved to `ontology/KARMA_v014_live.owl` for Protégé inspection.
 - **Change streams**: Require a MongoDB replica set. The local setup is standalone, so `--polling` mode is the default for development. Change streams are attempted first; if they fail, the monitor falls back to polling.
 - **`Otr_acc` scale factor**: The OPC-UA server returns `Int16`. Thresholds (21.73, 23.85) assume real-unit values. If the machine returns 2173 instead of 21.73, set `SCALE_FACTOR = 0.01` in `simulate_data.py` and divide accordingly in `update_ontology.py`.
 - **Machine availability**: The TELMA machine is not always on — use `simulate_data.py` for all offline development.
