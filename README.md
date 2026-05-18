@@ -221,9 +221,10 @@ The deliverable is `dist-installer\PIDR-Setup.exe` — a single double-clickable
 
 ### Build prerequisites (Windows 10/11 x64)
 
-1. **Python 3.11+** on `PATH`.
-2. **Inno Setup 6** — install from <https://jrsoftware.org/isinfo.php>. `ISCC.exe` ends up at `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`; the build script finds it automatically.
-3. **Internet access** during the first build (downloads JRE, MongoDB MSI, WebView2 bootstrapper into `installer\redist\`).
+1. **PowerShell 7+** (`pwsh`) — install from <https://github.com/PowerShell/PowerShell/releases>. Windows PowerShell 5.1 (`powershell.exe`) is **not supported**.
+2. **Python 3.11+** on `PATH`.
+3. **Inno Setup 6** — install from <https://jrsoftware.org/isinfo.php>. `ISCC.exe` ends up at `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`; the build script finds it automatically.
+4. **Internet access** during the first build (downloads JRE, MongoDB MSI, WebView2 bootstrapper into `installer\redist\`).
 
 Cross-building from Linux/macOS is **not supported** — PyInstaller produces Windows `.exe` only on Windows.
 
@@ -232,7 +233,7 @@ Cross-building from Linux/macOS is **not supported** — PyInstaller produces Wi
 From the project root in PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File installer\build.ps1
+pwsh -ExecutionPolicy Bypass -File installer\build.ps1
 ```
 
 What it does:
@@ -279,7 +280,7 @@ cd C:\path\to\pidr
 git pull
 # Bump #define MyAppVersion "x.y.z" in installer\pidr.iss
 #   — do NOT change AppId (the GUID), or the upgrade becomes a side-by-side install.
-powershell -ExecutionPolicy Bypass -File installer\build.ps1
+pwsh -ExecutionPolicy Bypass -File installer\build.ps1
 ```
 
 Ship the resulting `dist-installer\PIDR-Setup.exe`. On the user's machine: double-click; uncheck "Install MongoDB" and WebView2 on the prerequisites page (already installed); click Install.

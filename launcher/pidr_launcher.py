@@ -70,9 +70,9 @@ def ensure_mongodb() -> bool:
     else:
         if not _port_open("127.0.0.1", 27017, timeout=1.0):
             _msgbox(
-                "PIDR — MongoDB not installed",
+                "MongoDB not installed",
                 "MongoDB service was not found.\n\n"
-                "Re-run the PIDR installer and keep the "
+                "Re-run the installer and keep the "
                 "'Install MongoDB' option checked.",
                 0x10,
             )
@@ -83,7 +83,7 @@ def ensure_mongodb() -> bool:
             return True
         time.sleep(0.5)
 
-    _msgbox("PIDR — MongoDB unreachable",
+    _msgbox("MongoDB unreachable",
             "MongoDB service did not come up on port 27017.", 0x10)
     return False
 
@@ -97,6 +97,18 @@ def _port_open(host: str, port: int, timeout: float = 0.5) -> bool:
 
 
 def start_streamlit() -> None:
+    # Streamlit calls signal.signal() during startup, which raises ValueError
+    # when running in a non-main thread. Patch it to silently skip those calls
+    # since pywebview owns the main thread and manages the app lifecycle.
+    import signal as _signal
+    _orig = _signal.signal
+    def _safe_signal(sig, handler):
+        try:
+            return _orig(sig, handler)
+        except ValueError:
+            pass
+    _signal.signal = _safe_signal
+
     sys.argv = [
         "streamlit", "run", DASHBOARD_SCRIPT,
         "--server.address", STREAMLIT_HOST,
@@ -126,14 +138,14 @@ def run_dashboard() -> int:
     threading.Thread(target=start_streamlit, daemon=True).start()
 
     if not wait_for_streamlit():
-        _msgbox("PIDR — Dashboard failed to start",
+        _msgbox("Dashboard failed to start",
                 "The Streamlit server did not become reachable. "
-                "Check %LOCALAPPDATA%\\PIDR\\launcher.log.", 0x10)
+                "Check %LOCALAPPDATA%\\TELMA\\launcher.log.", 0x10)
         return 3
 
     import webview  # noqa: WPS433
     webview.create_window(
-        "PIDR — TELMA Fault Detection",
+        "TELMA Fault Detection",
         f"http://{STREAMLIT_HOST}:{STREAMLIT_PORT}",
         width=1400, height=900, min_size=(1024, 720),
     )

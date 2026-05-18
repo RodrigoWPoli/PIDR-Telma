@@ -235,7 +235,7 @@ def run_pipeline(verbose: bool = False) -> dict:
     print("\n── Step 1: Reading latest values from MongoDB ───────────")
     values = get_latest_values()
     if not values:
-        print("  ✗ No data found in MongoDB. Run simulate_data.py first.")
+        print("  ✗ No data found in MongoDB.")
         return {}
     for k, v in values.items():
         print(f"  {k}: {v}")

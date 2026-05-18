@@ -1,23 +1,23 @@
-; PIDR — Inno Setup script
+; TELMA Dashboard — Inno Setup script
 ; Bundles the PyInstaller onedir output plus the MongoDB MSI and the
 ; Microsoft Edge WebView2 bootstrapper. Build with:
 ;     iscc installer\pidr.iss
 
-#define MyAppName      "PIDR"
+#define MyAppName      "TELMA Dashboard"
 #define MyAppPublisher "CRAN — Universite de Lorraine"
 #define MyAppVersion   "1.0.0"
-#define MyAppExeName   "pidr-launcher.exe"
+#define MyAppExeName   "telma-dashboard.exe"
 
 [Setup]
 AppId={{C6F0F0F8-2D4D-4D4F-9E2C-6B7F2E2E2E2E}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
-DefaultDirName={autopf}\PIDR
+DefaultDirName={autopf}\TELMA Dashboard
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\dist-installer
-OutputBaseFilename=PIDR-Setup
+OutputBaseFilename=TELMA-Dashboard-Setup
 Compression=lzma2/ultra
 SolidCompression=yes
 WizardStyle=modern
@@ -35,7 +35,7 @@ Name: "installwebview"; Description: "Install Microsoft Edge WebView2 runtime (s
 
 [Files]
 ; PyInstaller onedir output: ..\dist\pidr\* gets installed under {app}\app\
-Source: "..\dist\pidr\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\dist\telma\*"; DestDir: "{app}\app"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Redistributables shipped inside the installer.
 Source: "redist\mongodb-windows-x86_64-8.0.4-signed.msi"; DestDir: "{tmp}"; Flags: deleteafterinstall; Tasks: installmongo
 Source: "redist\MicrosoftEdgeWebView2Setup.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall; Tasks: installwebview

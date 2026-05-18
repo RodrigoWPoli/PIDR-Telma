@@ -414,7 +414,7 @@ if active_tab == "Monitor":
 
         values = get_latest_values()
         if not values:
-            st.warning("No data in MongoDB. Run simulate_data.py or data_collection.py first.")
+            st.warning("No data in MongoDB. Run data_collection.py first.")
             return
 
         if st.session_state.auto_update_ontology:

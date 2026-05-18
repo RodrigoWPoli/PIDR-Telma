@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-"""PyInstaller spec for PIDR — Windows onedir build.
+"""PyInstaller spec for TELMA Dashboard — Windows onedir build.
 
 Build with:
     pyinstaller launcher/pidr.spec
@@ -89,7 +89,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name="pidr-launcher",
+    name="telma-dashboard",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -111,5 +111,5 @@ coll = COLLECT(
     strip=False,
     upx=False,
     upx_exclude=[],
-    name="pidr",
+    name="telma",
 )

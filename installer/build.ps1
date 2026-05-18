@@ -1,9 +1,10 @@
 <#
 .SYNOPSIS
-    Build the PIDR Windows installer.
+    Build the TELMA Dashboard Windows installer.
 
 .DESCRIPTION
     Run from the project root on a Windows machine that has:
+      - PowerShell 7+ (pwsh)
       - Python 3.11+ on PATH
       - Inno Setup 6 (iscc.exe) on PATH or at the default install location
       - Internet access (to download JRE, MongoDB MSI, WebView2 bootstrapper)
@@ -14,10 +15,10 @@
          into installer/redist/
       3. Create a Python venv and install requirements-build.txt
       4. Run PyInstaller against launcher/pidr.spec
-      5. Run Inno Setup to produce dist-installer/PIDR-Setup.exe
+      5. Run Inno Setup to produce dist-installer/TELMA-Dashboard-Setup.exe
 
 .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File installer\build.ps1
+    pwsh -ExecutionPolicy Bypass -File installer\build.ps1
 #>
 
 [CmdletBinding()]
@@ -102,5 +103,5 @@ if (-not $Iscc) { throw "iscc.exe not found. Install Inno Setup 6." }
 & $Iscc "$ProjectRoot\installer\pidr.iss"
 if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed (exit $LASTEXITCODE)" }
 
-$Installer = Join-Path $ProjectRoot "dist-installer\PIDR-Setup.exe"
+$Installer = Join-Path $ProjectRoot "dist-installer\TELMA-Dashboard-Setup.exe"
 Step "Done. Installer: $Installer"
