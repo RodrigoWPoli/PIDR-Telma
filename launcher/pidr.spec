@@ -25,7 +25,6 @@ datas += copy_metadata("streamlit")
 datas += [
     (os.path.join(PROJECT_ROOT, "dashboard.py"), "."),
     (os.path.join(PROJECT_ROOT, "update_ontology.py"), "."),
-    (os.path.join(PROJECT_ROOT, "realtime_monitor.py"), "."),
     (os.path.join(PROJECT_ROOT, "data_collection.py"), "."),
     (os.path.join(PROJECT_ROOT, "ontology", "KARMA_v014.owl"), "ontology"),
 ]

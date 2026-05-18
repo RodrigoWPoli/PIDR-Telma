@@ -110,6 +110,8 @@ st.markdown("""
 div[data-testid="metric-container"] { background: #f8f8f7; border-radius: 8px; padding: 0.75rem 1rem; }
 [data-testid="stMetricLabel"] { font-size: 12px !important; color: #888 !important; }
 [data-testid="stMetricValue"] { font-size: 24px !important; font-weight: 500 !important; }
+[data-stale="true"] { opacity: 1 !important; transition: none !important; }
+.stApp [data-stale] * { transition: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -265,113 +267,16 @@ if "replay_interval" not in st.session_state:
 if "replay_onto" not in st.session_state:
     st.session_state.replay_onto = None
 if "auto_update_ontology" not in st.session_state:
-    st.session_state.auto_update_ontology = True
+    st.session_state.auto_update_ontology = False
 if "monitor_active" not in st.session_state:
     st.session_state.monitor_active = True
 if "pellet_reasoner_active" not in st.session_state:
     st.session_state.pellet_reasoner_active = False
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "Monitor"
 
 
-# ── Sidebar ────────────────────────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown("### Controls")
-    st.markdown("<hr style='margin:0.5rem 0;'>", unsafe_allow_html=True)
-
-    st.markdown("**Network**")
-    vpn_ok, vpn_msg = check_vpn()
-    if vpn_ok:
-        st.success(vpn_msg, icon="✅")
-    else:
-        st.error(vpn_msg, icon="🔴")
-
-    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
-
-    st.markdown("**Data collection**")
-    proc = st.session_state.collection_process
-    is_running = proc is not None and proc.poll() is None
-
-    if is_running:
-        st.success("Collecting — running", icon="⏺️")
-        if st.button("Stop collection", use_container_width=True):
-            proc.terminate()
-            proc.wait(timeout=3)
-            st.session_state.collection_process = None
-            st.session_state.collection_log.insert(
-                0, f"{datetime.now().strftime('%H:%M:%S')} — stopped (wait ~10s before restarting)")
-            st.rerun()
-    else:
-        if proc is not None:
-            exit_code = proc.poll()
-            if exit_code != 0:
-                st.warning("Collection stopped unexpectedly. Check data/collection.log", icon="⚠️")
-            st.session_state.collection_log.insert(
-                0, f"{datetime.now().strftime('%H:%M:%S')} — finished (exit {exit_code})")
-            st.session_state.collection_process = None
-
-        if st.button("Start collection", use_container_width=True,
-                     type="primary", disabled=not vpn_ok):
-            if getattr(sys, "frozen", False):
-                cmd = [sys.executable, "--data-collection"]
-            else:
-                script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                      "data_collection.py")
-                cmd = [sys.executable, script]
-            p = subprocess.Popen(
-                cmd,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-            st.session_state.collection_process = p
-            st.session_state.collection_log.insert(
-                0, f"{datetime.now().strftime('%H:%M:%S')} — started")
-            st.rerun()
-
-    if st.session_state.collection_log:
-        for entry in st.session_state.collection_log[:4]:
-            st.caption(entry)
-
-    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
-
-    st.markdown("**Monitor**")
-    st.toggle("Monitor active", key="monitor_active")
-
-    if st.session_state.monitor_active:
-        st.markdown("**Ontology**")
-        st.toggle("Auto-update ontology", key="auto_update_ontology",
-                  help="Keep OWL individuals in sync with latest MongoDB data")
-        st.toggle("Run Pellet reasoner on update", key="pellet_reasoner_active",
-                  help="Launch Pellet after each ontology update (heavier, ~1-3s)")
-        if st.button("Save ontology snapshot", use_container_width=True):
-            onto = get_ontology()
-            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-            path = os.path.join(SCRIPT_DIR, "ontology", f"KARMA_v014_snapshot_{ts}.owl")
-            onto.save(file=path, format="rdfxml")
-            st.toast(f"Snapshot saved: {os.path.basename(path)}")
-            st.session_state.ontology_log.insert(
-                0, f"{datetime.now().strftime('%H:%M:%S')} — snapshot saved")
-
-    if st.session_state.ontology_log:
-        for entry in st.session_state.ontology_log[:4]:
-            st.caption(entry)
-
-    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
-
-    st.markdown("**Settings**")
-    REFRESH_INTERVAL = st.slider(
-        "Refresh interval (s)", min_value=1, max_value=10,
-        value=REFRESH_INTERVAL, step=1
-    )
-    if st.button("Clear state history", use_container_width=True):
-        st.session_state.state_history = []
-        st.session_state.last_state = None
-        st.rerun()
-
-    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
-    st.caption("TELMA Fault Detection · PIDR n°30")
-    st.caption("CRAN / MPSI · Université de Lorraine")
-
-
-# ── Page header ────────────────────────────────────────────────────────────────
+# ── Page header & nav (rendered before sidebar so sidebar can read active_tab) ─
 col_title, col_time = st.columns([3, 1])
 with col_title:
     st.markdown("### TELMA — fault detection")
@@ -387,11 +292,117 @@ with col_time:
 st.markdown("<hr style='border:none;border-top:0.5px solid #e5e5e5;margin:0 0 1rem;'>",
             unsafe_allow_html=True)
 
-tab_monitor, tab_data, tab_replay = st.tabs(["Monitor", "Data explorer", "Replay"])
+active_tab = st.radio(
+    "View", ["Monitor", "Data explorer", "Replay"],
+    horizontal=True, key="active_tab", label_visibility="collapsed",
+)
+
+
+# ── Sidebar ────────────────────────────────────────────────────────────────────
+with st.sidebar:
+    st.markdown("### Controls")
+    st.markdown("<hr style='margin:0.5rem 0;'>", unsafe_allow_html=True)
+
+    vpn_ok = True
+    if active_tab != "Replay":
+        st.markdown("**Network**")
+        vpn_ok, vpn_msg = check_vpn()
+        if vpn_ok:
+            st.success(vpn_msg, icon="✅")
+        else:
+            st.error(vpn_msg, icon="🔴")
+
+        st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+        st.markdown("**Data collection**")
+        proc = st.session_state.collection_process
+        is_running = proc is not None and proc.poll() is None
+
+        if is_running:
+            st.success("Collecting — running", icon="⏺️")
+            if st.button("Stop collection", use_container_width=True):
+                proc.terminate()
+                proc.wait(timeout=3)
+                st.session_state.collection_process = None
+                st.session_state.collection_log.insert(
+                    0, f"{datetime.now().strftime('%H:%M:%S')} — stopped (wait ~10s before restarting)")
+                st.rerun()
+        else:
+            if proc is not None:
+                exit_code = proc.poll()
+                if exit_code != 0:
+                    st.warning("Collection stopped unexpectedly. Check data/collection.log", icon="⚠️")
+                st.session_state.collection_log.insert(
+                    0, f"{datetime.now().strftime('%H:%M:%S')} — finished (exit {exit_code})")
+                st.session_state.collection_process = None
+
+            if st.button("Start collection", use_container_width=True,
+                         type="primary", disabled=not vpn_ok):
+                if getattr(sys, "frozen", False):
+                    cmd = [sys.executable, "--data-collection"]
+                else:
+                    script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                          "data_collection.py")
+                    cmd = [sys.executable, script]
+                p = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                st.session_state.collection_process = p
+                st.session_state.collection_log.insert(
+                    0, f"{datetime.now().strftime('%H:%M:%S')} — started")
+                st.rerun()
+
+        if st.session_state.collection_log:
+            for entry in st.session_state.collection_log[:4]:
+                st.caption(entry)
+
+        st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+        st.markdown("**Monitor**")
+        st.toggle("Monitor active", key="monitor_active")
+
+    show_ontology = (active_tab == "Replay") or st.session_state.monitor_active
+    if show_ontology:
+        st.markdown("**Ontology**")
+        st.toggle("Auto-update ontology", key="auto_update_ontology",
+                  help="Keep OWL individuals in sync with latest data")
+        st.toggle("Run Pellet reasoner on update", key="pellet_reasoner_active",
+                  help="Launch Pellet after each ontology update (heavier, ~1-3s)")
+        if st.button("Save ontology snapshot", use_container_width=True):
+            onto = get_ontology()
+            ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+            path = os.path.join(USER_DATA_DIR, "ontology", f"KARMA_v014_snapshot_{ts}.owl")
+            onto.save(file=path, format="rdfxml")
+            st.toast(f"Snapshot saved: {os.path.basename(path)}")
+            st.session_state.ontology_log.insert(
+                0, f"{datetime.now().strftime('%H:%M:%S')} — snapshot saved")
+
+    if st.session_state.ontology_log:
+        for entry in st.session_state.ontology_log[:4]:
+            st.caption(entry)
+
+    if active_tab != "Replay":
+        st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+
+        st.markdown("**Settings**")
+        REFRESH_INTERVAL = st.slider(
+            "Refresh interval (s)", min_value=1, max_value=10,
+            value=REFRESH_INTERVAL, step=1
+        )
+        if st.button("Clear state history", use_container_width=True):
+            st.session_state.state_history = []
+            st.session_state.last_state = None
+            st.rerun()
+
+    st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
+    st.caption("TELMA Fault Detection · PIDR n°30")
+    st.caption("CRAN / MPSI · Université de Lorraine")
 
 
 # ── Monitor tab ─────────────────────────────────────────────────────────────────
-with tab_monitor:
+if active_tab == "Monitor":
 
     @st.fragment(run_every=REFRESH_INTERVAL)
     def monitor_tab():
@@ -631,35 +642,47 @@ with tab_monitor:
     monitor_tab()
 
 
+@st.cache_data(ttl=10, show_spinner=False)
+def _data_overview():
+    c = get_mongo()[DATABASE_NAME][COLLECTION_NAME]
+    first = c.find_one({"Otr_acc": {"$exists": True}},
+                       sort=[("Otr_acc.SourceTimestamp", 1)],
+                       projection={"Otr_acc.SourceTimestamp": 1})
+    last = c.find_one({"Otr_acc": {"$exists": True}},
+                      sort=[("Otr_acc.SourceTimestamp", -1)],
+                      projection={"Otr_acc.SourceTimestamp": 1})
+    first_ts = str(first["Otr_acc"]["SourceTimestamp"])[:19] if first else ""
+    last_ts  = str(last["Otr_acc"]["SourceTimestamp"])[:19] if last else ""
+    return c.estimated_document_count(), first_ts, last_ts
+
+
 # ── Data explorer tab ──────────────────────────────────────────────────────────
-with tab_data:
+if active_tab == "Data explorer":
     col = get_mongo()[DATABASE_NAME][COLLECTION_NAME]
-    total_docs = col.count_documents({})
+    total_docs, first_ts, last_ts = _data_overview()
 
     dc1, dc2, dc3 = st.columns(3)
     with dc1: st.metric("Total documents", f"{total_docs:,}")
     with dc2:
-        first = col.find_one({}, sort=[("Otr_acc.SourceTimestamp", 1)])
-        if first and "Otr_acc" in first:
-            st.metric("First reading", str(first["Otr_acc"]["SourceTimestamp"])[:19])
+        if first_ts:
+            st.metric("First reading", first_ts)
     with dc3:
-        last = col.find_one({}, sort=[("Otr_acc.SourceTimestamp", -1)])
-        if last and "Otr_acc" in last:
-            st.metric("Latest reading", str(last["Otr_acc"]["SourceTimestamp"])[:19])
+        if last_ts:
+            st.metric("Latest reading", last_ts)
 
     st.markdown("<hr style='border:none;border-top:0.5px solid #e5e5e5;margin:0.5rem 0;'>",
                 unsafe_allow_html=True)
 
     fc1, fc2, fc3, fc4 = st.columns([1, 1, 1, 2])
     with fc1:
-        view_mode = st.radio("Show", ["All", "Last N"], horizontal=True, index=0,
+        view_mode = st.radio("Show", ["Last N", "All"], horizontal=True, index=0,
                              key="data_view_mode")
     with fc2:
         if view_mode == "Last N":
             n_rows = st.selectbox("Rows", [50, 100, 250, 500, 1000], index=1,
                                   key="data_n_rows")
         else:
-            n_rows = None
+            n_rows = 5000
     with fc3:
         sort_order = st.radio("Sort", ["Newest first", "Oldest first"],
                               horizontal=True, index=0, key="data_sort_order")
@@ -675,10 +698,19 @@ with tab_data:
                                     ["All", "Healthy", "Alert", "Alarm", "Faulty", "Stopped"],
                                     key="data_search_state")
 
+    VARIABLE_NAMES_FETCH = [
+        "Otr_acc", "Rfrd_acc", "Ent_bob_cour", "Ent_bob_abou", "En_Production",
+        "TempMoteur_acc", "Lcr_acc", "Uop_acc", "Courroie_accu_tendue", "Courroie_accu_detendue",
+        "Otr_av", "Rfrd_av", "TempMoteur_av", "Lcr_av", "Uop_av",
+        "Cpt_nb_piece", "Cpt_nb_bobine", "Nombre_tours", "Dim_piece",
+        "CourantA", "CourantB", "CourantC", "CourantTot", "Ent_au",
+        "diActTorque", "diActlVelo",
+    ]
+    projection = {v: 1 for v in VARIABLE_NAMES_FETCH}
     query = {} if var_filter == "All" else {var_filter: {"$exists": True}}
-    cursor = col.find(query, sort=[("Otr_acc.SourceTimestamp", -1)])
-    if n_rows is not None:
-        cursor = cursor.limit(n_rows)
+    cursor = (col.find(query, projection=projection)
+                 .sort("Otr_acc.SourceTimestamp", -1)
+                 .limit(n_rows))
     docs = list(cursor)
     if sort_order == "Oldest first":
         docs.reverse()
@@ -740,7 +772,7 @@ with tab_data:
 
 
 # ── Replay tab ─────────────────────────────────────────────────────────────────
-with tab_replay:
+if active_tab == "Replay":
 
     # Controls — outside the fragment so Start/Stop work even while replay is running
     st.markdown("<div class='panel-title'>Data source</div>", unsafe_allow_html=True)
@@ -798,14 +830,12 @@ with tab_replay:
                 loaded = load_csv_rows(selected_csv_path)
             else:
                 loaded = load_mongo_rows()
-        onto_r, _ = load_ontology()
         st.session_state.replay_rows         = loaded
         st.session_state.replay_index        = 0
         st.session_state.replay_results      = []
         st.session_state.replay_prev_values  = {}
         st.session_state.replay_state_counts = {}
         st.session_state.replay_interval     = replay_interval_ui
-        st.session_state.replay_onto         = onto_r
         st.session_state.replay_running      = True
         st.rerun()
 
@@ -835,10 +865,19 @@ with tab_replay:
                 cur.update(row_values)
                 st.session_state.replay_prev_values = cur
 
-                try:
-                    update_data_properties(st.session_state.replay_onto, cur)
-                except Exception:
-                    pass
+                if st.session_state.auto_update_ontology:
+                    onto = get_ontology()
+                    try:
+                        update_data_properties(onto, cur)
+                        onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                        if st.session_state.pellet_reasoner_active and not _pellet_running:
+                            _pellet_running = True
+                            threading.Thread(target=_pellet_thread,
+                                             args=(LIVE_ONTOLOGY_PATH,),
+                                             daemon=True).start()
+                    except Exception:
+                        pass
+
                 res = infer_state(cur)
 
                 ts_r = row_r.get("_ts")
@@ -884,17 +923,18 @@ with tab_replay:
 
             with rcard:
                 src_ts_label = f"src {last_r['src_ts']}" if last_r["src_ts"] else ""
-                st.markdown(f"""
-                <div class="state-card" style="background:{rcfg['bg']};
-                             border-color:{rcfg['color']}33; margin-bottom:0.5rem;">
-                    <div class="state-label">replayed state · row {last_r['row_num']}</div>
-                    <div class="state-value" style="color:{rcfg['color']};">{last_state_r}</div>
-                    <div class="state-sub">
-                        Otr_acc = {last_r['otr']:.1f} Nm &nbsp;·&nbsp;
-                        CoilChanging = {last_r['is_coil_changing']}
-                        {'&nbsp;·&nbsp;' + src_ts_label if src_ts_label else ''}
-                    </div>
-                </div>""", unsafe_allow_html=True)
+                st.markdown(
+                    f'<div class="state-card" style="background:{rcfg["bg"]};'
+                    f'border-color:{rcfg["color"]}33; margin-bottom:0.5rem;">'
+                    f'<div class="state-label">replayed state · row {last_r["row_num"]}</div>'
+                    f'<div class="state-value" style="color:{rcfg["color"]};">{last_state_r}</div>'
+                    f'<div class="state-sub">'
+                    f'Otr_acc = {last_r["otr"]:.1f} Nm &nbsp;·&nbsp; '
+                    f'CoilChanging = {last_r["is_coil_changing"]}'
+                    f'{"&nbsp;·&nbsp; " + src_ts_label if src_ts_label else ""}'
+                    f'</div></div>',
+                    unsafe_allow_html=True,
+                )
 
                 if last_r["deviations"] or last_r["failure_states"]:
                     dev_html = ""
