@@ -344,10 +344,13 @@ with st.sidebar:
                     script = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                           "data_collection.py")
                     cmd = [sys.executable, script]
+                log_path = os.path.join(USER_DATA_DIR, "data", "collection.log")
+                os.makedirs(os.path.dirname(log_path), exist_ok=True)
+                log_file = open(log_path, "w")
                 p = subprocess.Popen(
                     cmd,
-                    stdout=subprocess.DEVNULL,
-                    stderr=subprocess.DEVNULL
+                    stdout=log_file,
+                    stderr=log_file
                 )
                 st.session_state.collection_process = p
                 st.session_state.collection_log.insert(

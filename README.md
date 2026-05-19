@@ -222,7 +222,7 @@ The deliverable is `dist-installer\PIDR-Setup.exe` — a single double-clickable
 ### Build prerequisites (Windows 10/11 x64)
 
 1. **PowerShell 7+** (`pwsh`) — install from <https://github.com/PowerShell/PowerShell/releases>. Windows PowerShell 5.1 (`powershell.exe`) is **not supported**.
-2. **Python 3.11+** on `PATH`.
+2. **Python 3.11+** on `PATH`.py
 3. **Inno Setup 6** — install from <https://jrsoftware.org/isinfo.php>. `ISCC.exe` ends up at `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`; the build script finds it automatically.
 4. **Internet access** during the first build (downloads JRE, MongoDB MSI, WebView2 bootstrapper into `installer\redist\`).
 
