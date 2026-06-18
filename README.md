@@ -19,7 +19,7 @@ The system detects bearing deterioration faults in the TELMA unwinding press by:
 The monitored component is the **AccumulatorMotor**. The primary indicator is `Otr_acc` (motor torque) — as bearing wear increases, torque rises above the alert and alarm thresholds.
 
 ```
-OPC-UA server (TELMA PLC via VPN)
+OPC-UA server (TELMA PLC)
         │ opc.tcp://100.65.63.65:4840
         ▼
 data_collection.py  ─►  MongoDB (telma.data)
@@ -73,10 +73,45 @@ python3 test_connections.py            # 4. Verify environment (all 6 checks mus
 ### Running
 
 ```bash
-python3 data_collection.py 300         # collect 5 min from OPC-UA (VPN required)
+python3 data_collection.py 300         # collect 5 min from OPC-UA
 python3 update_ontology.py --verbose   # one-shot inference on latest MongoDB value
 streamlit run dashboard.py             # web dashboard at http://localhost:8501
 ```
+
+---
+
+## ⚠️ Setup (Windows — without installer)
+
+If you want to run the project directly on Windows without using the packaged installer:
+
+### Prerequisites
+
+| Software | Download | Notes |
+|----------|----------|-------|
+| **Python 3.10+** | https://www.python.org/downloads/ | Check "Add to PATH" during install |
+| **MongoDB Community 7+** | https://www.mongodb.com/try/download/community | Install as a Windows Service (default) |
+| **Java 17+** (optional) | https://adoptium.net/ | Only needed if using Pellet reasoner |
+
+### Installation
+
+Open a terminal (PowerShell or Command Prompt) **in the project folder**:
+
+```powershell
+pip install -r requirements.txt
+python test_connections.py            # verify all checks pass
+```
+
+### Running
+
+```powershell
+python data_collection.py 300         # collect 5 min from OPC-UA (optional)
+streamlit run dashboard.py            # web dashboard at http://localhost:8501
+```
+
+> **Note:** MongoDB must be running as a service before starting. You can verify with:
+> ```powershell
+> net start MongoDB
+> ```
 
 ---
 
@@ -112,8 +147,8 @@ The Streamlit dashboard (`dashboard.py`) is the main UI. Three tabs, sidebar tha
 
 The sidebar shows different sections depending on the active tab:
 
-- **Monitor / Data explorer**: Network (VPN status), Data collection (Start/Stop subprocess), Monitor toggle, Ontology controls (when Monitor is active), Settings (refresh interval, Clear state history).
-- **Replay**: Only Ontology controls (Auto-update, Pellet, Save snapshot) — VPN/data collection/monitor sections are hidden.
+- **Monitor / Data explorer**: Data collection (Start/Stop subprocess), Monitor toggle, Ontology controls (when Monitor is active), Settings (refresh interval, Clear state history).
+- **Replay**: Only Ontology controls (Auto-update, Pellet, Save snapshot) — data collection/monitor sections are hidden.
 
 **Ontology controls:**
 - *Auto-update ontology* (default off) — writes current data property values to `ontology/KARMA_v014_live.owl` on each tick.
@@ -300,7 +335,6 @@ Keep the last 1–2 installer versions archived. To roll back, re-run the old `P
 ### Known follow-ups
 
 - **Code signing** — the unsigned `.exe` triggers SmartScreen. For distribution outside the lab, sign with an Authenticode certificate.
-- **VPN** — OPC-UA access still requires the AIPL VPN client; the installer does not configure it.
 
 ---
 
@@ -308,19 +342,6 @@ Keep the last 1–2 installer versions archived. To roll back, re-run the old `P
 
 - **Pellet reasoner**: `sync_reasoner_pellet` from owlready2 does not reliably return SWRL-inferred property values in Python — `motor.hasState` remains empty after reasoning despite Pellet executing successfully. SWRL rules are reimplemented natively in `update_ontology.py`. Pellet is optionally used in the dashboard to reason the live ontology file in a background thread; results are saved for inspection in Protégé.
 - **MongoDB change streams**: Require a replica set. The local standalone setup uses polling mode by default; change streams are attempted first and fall back to polling.
-- **`Otr_acc` scale factor**: The OPC-UA server returns `Int16`. Thresholds (21.73, 23.85) assume real-unit values. If the machine returns `2173` instead of `21.73`, adjust the scale factor in `update_ontology.py` and `dashboard.py`.
-- **Machine availability**: The TELMA machine is not always on — use the Replay tab with CSV files in `data/` for offline development.
-
----
-
-## Roadmap
-
-| Phase | Status | Description |
-|-------|--------|-------------|
-| 1 — Audit & Setup | ✅ Done | Environment, connections, end-to-end pipeline |
-| 2 — Real-time loop | ✅ Done | MongoDB polling monitor with state transitions |
-| 3 — Interface | ✅ Done | Streamlit dashboard with live ontology and Pellet reasoning |
-| 4 — Packaging | ✅ Done | Windows installer (PyInstaller + Inno Setup) bundling MongoDB and JRE |
 
 ---
 

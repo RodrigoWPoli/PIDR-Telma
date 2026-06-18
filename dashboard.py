@@ -10,7 +10,6 @@ Usage:
 import csv as csv_module
 import glob
 import os
-import socket
 import subprocess
 import sys
 import threading
@@ -24,15 +23,6 @@ from dateutil import parser as dateutil_parser
 from update_ontology import infer_state, load_ontology, update_data_properties
 from owlready2 import sync_reasoner_pellet, World
 
-
-# ── VPN check ─────────────────────────────────────────────────────────────────
-def check_vpn() -> tuple[bool, str]:
-    try:
-        s = socket.create_connection(("100.65.63.65", 4840), timeout=2)
-        s.close()
-        return True, "VPN connected · PLC reachable"
-    except OSError:
-        return False, "VPN disconnected · PLC unreachable"
 
 
 # ── Configuration ──────────────────────────────────────────────────────────────
@@ -303,17 +293,7 @@ with st.sidebar:
     st.markdown("### Controls")
     st.markdown("<hr style='margin:0.5rem 0;'>", unsafe_allow_html=True)
 
-    vpn_ok = True
     if active_tab != "Replay":
-        st.markdown("**Network**")
-        vpn_ok, vpn_msg = check_vpn()
-        if vpn_ok:
-            st.success(vpn_msg, icon="✅")
-        else:
-            st.error(vpn_msg, icon="🔴")
-
-        st.markdown("<hr style='margin:0.75rem 0;'>", unsafe_allow_html=True)
-
         st.markdown("**Data collection**")
         proc = st.session_state.collection_process
         is_running = proc is not None and proc.poll() is None
@@ -337,7 +317,7 @@ with st.sidebar:
                 st.session_state.collection_process = None
 
             if st.button("Start collection", use_container_width=True,
-                         type="primary", disabled=not vpn_ok):
+                         type="primary"):
                 if getattr(sys, "frozen", False):
                     cmd = [sys.executable, "--data-collection"]
                 else:

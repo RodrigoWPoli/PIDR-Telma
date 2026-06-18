@@ -39,10 +39,8 @@ result = subprocess.run(
 )
 if result.returncode == 0:
     print("    ✓ OPC-UA server host reachable (100.65.63.87)")
-    print("    → VPN appears to be connected")
 else:
     print("    ✗ OPC-UA server host NOT reachable (100.65.63.87)")
-    print("    → Connect the AIPL VPN first")
 
 # ── 4. OPC-UA library ──────────────────────────────────────
 print("\n[4] Testing opcua library...")

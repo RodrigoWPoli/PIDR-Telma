@@ -8,7 +8,6 @@ Based on Julie Galopeau's internship report (2023).
 Rebuilt for the 2025-2026 PIDR project.
 
 Requirements:
-    - AIPL VPN connected
     - MongoDB running locally
     - pip install opcua pymongo
 """
@@ -162,8 +161,7 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
             DeprecationWarning, stacklevel=2
         )
 
-    print(f"Connecting to OPC-UA server: {OPC_SERVER_URL}")
-    print("(Make sure AIPL VPN is connected)\n")
+    print(f"Connecting to OPC-UA server: {OPC_SERVER_URL}\n")
 
     MAX_CONNECT_RETRIES = 5
     RETRY_DELAY         = 5
@@ -175,7 +173,7 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
     for attempt in range(1, MAX_CONNECT_RETRIES + 1):
         try:
             opc_client.connect()
-            print("✓ OPC-UA connected\n")
+            print("[OK] OPC-UA connected\n")
             break
         except Exception as e:
             if "BadTooManySessions" in str(e):
@@ -235,14 +233,14 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
             time.sleep(sleep_time)
 
         elapsed_total = time.time() - start_time
-        print(f"\n✓ Collection complete ({elapsed_total:.1f}s)")
+        print(f"\n[OK] Collection complete ({elapsed_total:.1f}s)")
         print(f"  Documents stored in MongoDB: {collection.count_documents({})}")
 
     except KeyboardInterrupt:
         print("\nCollection stopped by user.")
 
     except Exception as e:
-        print(f"\n✗ Error during collection: {e}")
+        print(f"\n[ERR] Error during collection: {e}")
         raise
 
     finally:
