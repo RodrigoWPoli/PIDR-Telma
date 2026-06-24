@@ -17,6 +17,7 @@ Usage:
 """
 
 import os
+import re
 import sys
 import argparse
 import pymongo
@@ -115,6 +116,42 @@ def update_data_properties(onto, values: dict, verbose: bool = False) -> None:
                 bob_abou.hasVerticalPosition = [bool(values["Ent_bob_abou"])]
                 if verbose:
                     print(f"  Set Ent_bob_abou.hasVerticalPosition = {bool(values['Ent_bob_abou'])}")
+
+
+# ── Live OWL save (preserves SWRL rules) ──────────────────────────────────────
+def save_live_ontology(values: dict,
+                       live_path: str,
+                       base_path: str = ONTOLOGY_PATH) -> None:
+    """
+    Writes the live OWL by patching data property assertion literals directly in
+    the base OWL/XML source, rather than going through owlready2.save() which
+    silently strips DLSafeRule (SWRL) axioms when serialising as RDF/XML.
+    """
+    with open(base_path, "r", encoding="utf-8") as fh:
+        content = fh.read()
+
+    def _patch(prop_iri: str, individual_iri: str, new_value: str, text: str) -> str:
+        pattern = (
+            r'(<DataPropertyAssertion>\s*'
+            r'<DataProperty IRI="' + re.escape(prop_iri) + r'"/>\s*'
+            r'<NamedIndividual IRI="' + re.escape(individual_iri) + r'"/>\s*'
+            r'<Literal[^>]*>)[^<]*(</Literal>)'
+        )
+        return re.sub(pattern, r'\g<1>' + new_value + r'\g<2>', text, flags=re.DOTALL)
+
+    if "Otr_acc" in values:
+        content = _patch("#hasCurrentValue", "#Otr_acc",
+                         str(float(values["Otr_acc"])), content)
+    if "Ent_bob_cour" in values:
+        content = _patch("#hasHorizontalPosition", "#Ent_bob_cour",
+                         "true" if values["Ent_bob_cour"] else "false", content)
+    if "Ent_bob_abou" in values:
+        content = _patch("#hasVerticalPosition", "#Ent_bob_abou",
+                         "true" if values["Ent_bob_abou"] else "false", content)
+
+    os.makedirs(os.path.dirname(live_path), exist_ok=True)
+    with open(live_path, "w", encoding="utf-8") as fh:
+        fh.write(content)
 
 
 # ── Python-native SWRL rule evaluation ────────────────────────────────────────
@@ -245,6 +282,9 @@ def run_pipeline(verbose: bool = False) -> dict:
     print(f"  ✓ Loaded: {len(list(onto.classes()))} classes, "
           f"{len(list(onto.individuals()))} individuals")
     update_data_properties(onto, values, verbose=True)
+    live_path = os.path.abspath(os.path.join(SCRIPT_DIR, "ontology", "KARMA_v014_live.owl"))
+    save_live_ontology(values, live_path)
+    print(f"  ✓ Live ontology saved: {live_path}")
 
     print("\n── Step 3: Evaluating rules (Python-native) ─────────────")
     result = infer_state(values, verbose=True)

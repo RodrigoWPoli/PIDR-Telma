@@ -8,7 +8,6 @@ Usage:
 """
 
 import csv as csv_module
-import glob
 import os
 import subprocess
 import sys
@@ -20,7 +19,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from datetime import datetime
 from dateutil import parser as dateutil_parser
-from update_ontology import infer_state, load_ontology, update_data_properties
+from update_ontology import infer_state, load_ontology, update_data_properties, save_live_ontology
 from owlready2 import sync_reasoner_pellet, World
 
 
@@ -181,9 +180,6 @@ REPLAY_WATCHED = [
 DATA_DIR = os.path.join(USER_DATA_DIR, "data")
 
 
-def list_csv_files() -> list[str]:
-    return sorted(glob.glob(os.path.join(DATA_DIR, "collection_*.csv")))
-
 
 def load_csv_rows(path: str) -> list[dict]:
     rows = []
@@ -256,6 +252,8 @@ if "replay_interval" not in st.session_state:
     st.session_state.replay_interval = 4.0
 if "replay_onto" not in st.session_state:
     st.session_state.replay_onto = None
+if "selected_csv_path" not in st.session_state:
+    st.session_state.selected_csv_path = None
 if "auto_update_ontology" not in st.session_state:
     st.session_state.auto_update_ontology = False
 if "monitor_active" not in st.session_state:
@@ -404,7 +402,7 @@ if active_tab == "Monitor":
             onto = get_ontology()
             try:
                 update_data_properties(onto, values)
-                onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                save_live_ontology(values, LIVE_ONTOLOGY_PATH)
                 if st.session_state.pellet_reasoner_active and not _pellet_running:
                     _pellet_running = True
                     threading.Thread(target=_pellet_thread,
@@ -415,7 +413,7 @@ if active_tab == "Monitor":
                 onto = get_ontology()
                 try:
                     update_data_properties(onto, values)
-                    onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                    save_live_ontology(values, LIVE_ONTOLOGY_PATH)
                     if st.session_state.pellet_reasoner_active and not _pellet_running:
                         _pellet_running = True
                         threading.Thread(target=_pellet_thread,
@@ -760,9 +758,6 @@ if active_tab == "Replay":
     # Controls — outside the fragment so Start/Stop work even while replay is running
     st.markdown("<div class='panel-title'>Data source</div>", unsafe_allow_html=True)
 
-    csv_files = list_csv_files()
-    csv_names = [os.path.basename(f) for f in csv_files]
-
     rsc1, rsc2 = st.columns([2, 1])
     with rsc1:
         replay_source = st.radio(
@@ -781,16 +776,37 @@ if active_tab == "Replay":
         )
 
     if replay_source == "CSV file":
-        if csv_names:
-            selected_csv_name = st.selectbox(
-                "CSV file", csv_names,
-                disabled=st.session_state.replay_running,
-                key="replay_csv_select",
-            )
-            selected_csv_path = csv_files[csv_names.index(selected_csv_name)]
-        else:
-            st.warning("No CSV files found in data/")
-            selected_csv_path = None
+        bc1, bc2 = st.columns([1, 3])
+        with bc1:
+            if st.button("Browse…", disabled=st.session_state.replay_running,
+                         use_container_width=True):
+                import tkinter as tk
+                from tkinter import filedialog
+                root = tk.Tk()
+                root.withdraw()
+                root.wm_attributes("-topmost", True)
+                path = filedialog.askopenfilename(
+                    title="Select CSV file",
+                    filetypes=[("CSV files", "*.csv"), ("All files", "*.*")],
+                )
+                root.destroy()
+                if path:
+                    st.session_state.selected_csv_path = path
+                    st.rerun()
+        with bc2:
+            if st.session_state.selected_csv_path:
+                st.markdown(
+                    f"<p style='font-size:13px;margin-top:0.4rem;'>"
+                    f"{os.path.basename(st.session_state.selected_csv_path)}</p>",
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.markdown(
+                    "<p style='font-size:13px;color:#888;margin-top:0.4rem;'>"
+                    "No file selected</p>",
+                    unsafe_allow_html=True,
+                )
+        selected_csv_path = st.session_state.selected_csv_path
     else:
         selected_csv_path = None
 
@@ -852,7 +868,7 @@ if active_tab == "Replay":
                     onto = get_ontology()
                     try:
                         update_data_properties(onto, cur)
-                        onto.save(file=LIVE_ONTOLOGY_PATH, format="rdfxml")
+                        save_live_ontology(cur, LIVE_ONTOLOGY_PATH)
                         if st.session_state.pellet_reasoner_active and not _pellet_running:
                             _pellet_running = True
                             threading.Thread(target=_pellet_thread,
