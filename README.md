@@ -61,6 +61,112 @@ pidr/
 
 ---
 
+## Setup (Windows — without installer)
+
+This guide is for users who are **not familiar with coding**. It walks you through installing and running the dashboard manually, without the packaged installer.
+
+### Prerequisites
+
+You need to install three things first. All are free and can be installed with the default options (just click "Next" in the installers).
+
+| Software | Download | Notes |
+|----------|----------|-------|
+| **Python 3.10+** | https://www.python.org/downloads/ | IMPORTANT: Check the box **"Add Python to PATH"** during install (at the bottom of the first screen). |
+| **MongoDB Community 7+** | https://www.mongodb.com/try/download/community | Choose **Complete** setup. Accept the defaults — it will install as a Windows Service and start automatically. |
+| **Java 17+** (optional) | https://adoptium.net/ | Only needed if you want to use the Pellet reasoner inside the dashboard. |
+
+> **Alternative: install MongoDB from the terminal**
+> 
+> If you prefer not to use a web browser, open a PowerShell terminal as administrator and run:
+> ```powershell
+> winget install MongoDB.Server
+> ```
+> This works on Windows 10 (build 1709+) and Windows 11. `winget` is built into Windows.
+
+### Step 1 — Open a terminal in the project folder
+
+1. Download and extract the project ZIP, or clone it with Git.
+2. Open the project folder in **File Explorer**.
+3. Click on the **address bar** at the top of File Explorer, type `powershell`, and press **Enter**.
+
+> You can also use **Command Prompt**: type `cmd` in the address bar instead.
+> 
+> Alternatively, open the project folder in **VS Code** or **PyCharm**. These editors detect the `venv` folder and activate it automatically in their integrated terminal — you can skip the manual activate step, but you still have to create it.
+
+You should now see a terminal window with the project folder path.
+
+### Step 2 — Create a virtual environment (one-time)
+
+This creates an isolated Python environment so the project's libraries don't interfere with other software on your machine.
+
+In the terminal, type the following commands **one by one**, pressing Enter after each:
+
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+> If you see a red error about **"execution of scripts is disabled"**, run this first:
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+> ```
+> Then try `.\venv\Scripts\Activate.ps1` again.
+
+You should see `(venv)` appear at the beginning of your terminal prompt. That means the environment is active.
+
+### Step 3 — Install the project dependencies (one-time)
+
+```powershell
+pip install -r requirements.txt
+```
+
+This downloads and installs all the Python libraries the dashboard needs. It takes about 1–2 minutes.
+
+### Step 4 — Verify everything is set up correctly
+
+```powershell
+python test_connections.py
+```
+
+This checks that MongoDB is running and all dependencies work. All checks must show **[OK]**.
+
+### Step 5 — Start the dashboard
+
+```powershell
+streamlit run dashboard.py
+```
+
+After a few seconds, a browser tab should open automatically at `http://localhost:8501`.
+
+### Starting the dashboard later
+
+The next time you want to run the dashboard, you only need to repeat steps 1 and 5:
+
+1. Open the project folder in File Explorer, type `powershell` in the address bar (or open it in VS Code / PyCharm — they activate the venv automatically).
+2. Type these two commands:
+   ```powershell
+   .\venv\Scripts\Activate.ps1       # skip this if using VS Code / PyCharm
+   streamlit run dashboard.py
+   ```
+
+### Optional — collect sensor data from the TELMA machine
+
+If you are physically at CRAN and connected to the lab network, you can collect live sensor data:
+
+```powershell
+.\venv\Scripts\Activate.ps1
+python data_collection.py 300
+```
+
+This reads sensor values from the TELMA OPC-UA server for 5 minutes and stores them in MongoDB. Change `300` to the number of seconds you want.
+
+> **Note:** MongoDB runs as a background service and starts automatically with Windows. If the dashboard or data collection complains about MongoDB, verify it's running with:
+> ```powershell
+> Get-Service MongoDB
+> ```
+
+---
+
 ## Setup (Linux development)
 
 ```bash
@@ -77,41 +183,6 @@ python3 data_collection.py 300         # collect 5 min from OPC-UA
 python3 update_ontology.py --verbose   # one-shot inference on latest MongoDB value
 streamlit run dashboard.py             # web dashboard at http://localhost:8501
 ```
-
----
-
-## ⚠️ Setup (Windows — without installer)
-
-If you want to run the project directly on Windows without using the packaged installer:
-
-### Prerequisites
-
-| Software | Download | Notes |
-|----------|----------|-------|
-| **Python 3.10+** | https://www.python.org/downloads/ | Check "Add to PATH" during install |
-| **MongoDB Community 7+** | https://www.mongodb.com/try/download/community | Install as a Windows Service (default) |
-| **Java 17+** (optional) | https://adoptium.net/ | Only needed if using Pellet reasoner |
-
-### Installation
-
-Open a terminal (PowerShell or Command Prompt) **in the project folder**:
-
-```powershell
-pip install -r requirements.txt
-python test_connections.py            # verify all checks pass
-```
-
-### Running
-
-```powershell
-python data_collection.py 300         # collect 5 min from OPC-UA (optional)
-streamlit run dashboard.py            # web dashboard at http://localhost:8501
-```
-
-> **Note:** MongoDB must be running as a service before starting. You can verify with:
-> ```powershell
-> net start MongoDB
-> ```
 
 ---
 
@@ -348,7 +419,8 @@ Keep the last 1–2 installer versions archived. To roll back, re-run the old `P
 
 ## References
 
-- KARMA ontology: Dalena, A. et al. — CRAN / Politecnico di Milano
+- Sofia ZAPPA, Master thesis 2023 - CRAN/Politecnico di Milano
+- Zappa, S., Franciosi, C., Polenghi, A., & Voisin, A. (2025). Cognitive Digital Twin for industrial maintenance: operational framework for fault detection and diagnosis. Journal of Industrial Information Integration, 100974.
 - Previous internship: Julie Galopeau, 2022–2023 (codebase reference)
 - TELMA platform: <https://www.cran.univ-lorraine.fr/plates-formes/telma/>
 - owlready2 documentation: <https://owlready2.readthedocs.io/>
