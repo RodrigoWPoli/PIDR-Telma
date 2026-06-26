@@ -115,7 +115,7 @@ def reconnect(opc_client: Client) -> Client:
         opc_client.disconnect()
     except Exception:
         pass
-    new_client = Client(OPC_SERVER_URL)
+    new_client = Client(OPC_SERVER_URL, timeout=10)
     new_client.session_timeout = 30000
     new_client.connect()
     return new_client
@@ -167,7 +167,7 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
     RETRY_DELAY         = 5
 
     # ── Connect with retry ─────────────────────────────────────────────────────
-    opc_client = Client(OPC_SERVER_URL)
+    opc_client = Client(OPC_SERVER_URL, timeout=10)
     opc_client.session_timeout = 30000
 
     for attempt in range(1, MAX_CONNECT_RETRIES + 1):
@@ -175,18 +175,42 @@ def collect(duration_seconds: int = None, csv_output: str = None) -> None:
             opc_client.connect()
             print("[OK] OPC-UA connected\n")
             break
+        except TimeoutError as e:
+            print(f"  Connection timed out (attempt {attempt}/{MAX_CONNECT_RETRIES}).")
+            if attempt < MAX_CONNECT_RETRIES:
+                print(f"  Retrying in {RETRY_DELAY}s...")
+                time.sleep(RETRY_DELAY)
+                opc_client = Client(OPC_SERVER_URL, timeout=10)
+                opc_client.session_timeout = 30000
+            else:
+                raise RuntimeError(
+                    f"Could not connect after {MAX_CONNECT_RETRIES} attempts — "
+                    f"server {OPC_SERVER_URL} is unreachable."
+                ) from e
         except Exception as e:
-            if "BadTooManySessions" in str(e):
+            error_msg = str(e)
+            if "BadTooManySessions" in error_msg:
                 print(f"  Server session limit reached (attempt {attempt}/{MAX_CONNECT_RETRIES}).")
                 if attempt < MAX_CONNECT_RETRIES:
                     print(f"  Waiting {RETRY_DELAY}s for sessions to expire...")
                     time.sleep(RETRY_DELAY)
-                    opc_client = Client(OPC_SERVER_URL)
+                    opc_client = Client(OPC_SERVER_URL, timeout=10)
                     opc_client.session_timeout = 30000
                 else:
                     raise RuntimeError(
                         f"Could not connect after {MAX_CONNECT_RETRIES} attempts. "
                         "Wait ~30s for old sessions to expire, then try again."
+                    ) from e
+            elif "ConnectionRefusedError" in error_msg or "Errno" in error_msg:
+                print(f"  Connection refused / network error (attempt {attempt}/{MAX_CONNECT_RETRIES}).")
+                if attempt < MAX_CONNECT_RETRIES:
+                    print(f"  Retrying in {RETRY_DELAY}s...")
+                    time.sleep(RETRY_DELAY)
+                    opc_client = Client(OPC_SERVER_URL, timeout=10)
+                    opc_client.session_timeout = 30000
+                else:
+                    raise RuntimeError(
+                        f"Could not connect after {MAX_CONNECT_RETRIES} attempts."
                     ) from e
             else:
                 raise
